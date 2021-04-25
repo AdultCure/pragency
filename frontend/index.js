@@ -1,1 +1,0 @@
-const govno = "artemis petchuch";
