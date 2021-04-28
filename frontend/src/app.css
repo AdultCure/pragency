@@ -1,0 +1,28 @@
+@import "~normalize.css/normalize.css";
+
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Montserrat"), url("./assets/fonts/Montserrat-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  src: local("Montserrat"), url("./assets/fonts/Montserrat-Medium.ttf");
+}
+
+* {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: normal;
+}
+li {
+  list-style-type: none;
+}
+ul {
+  margin-left: 0;
+  padding-left: 0;
+}

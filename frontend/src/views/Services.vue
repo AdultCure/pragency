@@ -1,18 +1,16 @@
 <template>
-  <div class="home">
+  <div class="services">
     <main-header />
-    <h1>Главная</h1>
+    <h1>Услуги</h1>
   </div>
 </template>
 
 <script>
 import MainHeader from "../components/MainHeader.vue";
 export default {
-  name: "Home",
+  name: "Services",
   components: {
     MainHeader,
   },
 };
 </script>
-
-<style lang="scss" scoped></style>
