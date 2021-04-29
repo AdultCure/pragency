@@ -23,6 +23,8 @@ export default {};
 
 <style lang="scss" scoped>
 .main-header {
+  position: sticky;
+  top: 0;
   background: #fff;
   padding: 0 40px;
 }
