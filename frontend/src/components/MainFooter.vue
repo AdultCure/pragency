@@ -16,13 +16,14 @@ export default {};
 .main-footer {
   background: #fff;
   padding: 0 45px;
+  border-top: 1px solid #66ccff;
 }
 .footer-wrapper {
   background: #fff;
   max-width: 1440px;
   width: 100%;
   display: flex;
-  height: 80px;
+  height: 79px;
   align-items: center;
   margin: 0 auto;
 }

@@ -36,7 +36,7 @@ export default {};
   display: flex;
   margin: 0 auto;
   flex-direction: row;
-  height: 80px;
+  height: 79px;
   align-items: center;
 }
 .header-logo {
