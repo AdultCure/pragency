@@ -1,9 +1,12 @@
 <template>
   <div class="main-header">
     <div class="header-wrapper">
-      <a href="/"
-        ><img src="..\assets\pictures\logo.svg" alt="logo" class="header-logo"
-      /></a>
+      <img
+        src="..\assets\pictures\logo.svg"
+        alt="logo"
+        class="header-logo"
+        @click="$router.push('/')"
+      />
       <h1 class="header-title">KS Creative</h1>
       <ul class="header-menu">
         <li class="menu-main" @click="$router.push('/')">Главная</li>
