@@ -22,13 +22,19 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
+.main-header {
+  background: #fff;
+  padding: 0 40px;
+}
 .header-wrapper {
   background: #fff;
+  max-width: 1440px;
+  width: 100%;
   display: flex;
+  margin: 0 auto;
   flex-direction: row;
   height: 80px;
   align-items: center;
-  padding: 0 40px;
 }
 .header-logo {
   width: 35px;
@@ -36,6 +42,7 @@ export default {};
   cursor: pointer;
 }
 .header-title {
+  font-weight: normal;
   font-size: 24px;
   color: #59abff;
   padding-bottom: 10px;
