@@ -27,6 +27,7 @@ export default {};
   top: 0;
   background: #fff;
   padding: 0 40px;
+  border-bottom: 1px solid #66ccff;
 }
 .header-wrapper {
   background: #fff;
