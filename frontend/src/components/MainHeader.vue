@@ -9,16 +9,31 @@
       />
       <h1 class="header-title">KS Creative</h1>
       <ul class="header-menu">
-        <li class="menu-main" @click="$router.push('/')">Главная</li>
-        <li class="menu-services" @click="$router.push('/services')">Услуги</li>
+        <li class="menu-item" @click="$router.push('/')">Главная</li>
+        <li class="menu-item" @click="$router.push('/services')">Услуги</li>
       </ul>
-      <button class="header-button">Войти</button>
+      <button class="header-button" @click="showModal">
+        Войти
+      </button>
     </div>
+    <modal-auth ref="modalAuth" />
   </div>
 </template>
 
 <script>
-export default {};
+import ModalAuth from "./modal/ModalAuth.vue";
+
+export default {
+  name: "MainHeader",
+  components: {
+    ModalAuth,
+  },
+  methods: {
+    showModal() {
+      this.$refs.modalAuth.show = true;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -76,5 +91,15 @@ export default {};
   color: #fff;
   font-size: 14px;
   cursor: pointer;
+  &:hover {
+    background: #fff;
+    color: #59abff;
+  }
+}
+.menu-item {
+  height: 20px;
+  &:hover {
+    border-bottom: 2px solid #59abff;
+  }
 }
 </style>
