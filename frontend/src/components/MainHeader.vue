@@ -1,13 +1,10 @@
 <template>
   <div class="main-header">
     <div class="header-wrapper">
-      <img
-        src="..\assets\pictures\logo.svg"
-        alt="logo"
-        class="header-logo"
-        @click="$router.push('/')"
-      />
-      <h1 class="header-title">KS Creative</h1>
+      <div class="header-title-wrapper" @click="$router.push('/')">
+        <img src="..\assets\pictures\logo.svg" alt="logo" class="header-logo" />
+        <h1 class="header-title">KS Creative</h1>
+      </div>
       <ul class="header-menu">
         <li class="menu-item" @click="$router.push('/')">Главная</li>
         <li class="menu-item" @click="$router.push('/services')">Услуги</li>
@@ -54,10 +51,13 @@ export default {
   height: 79px;
   align-items: center;
 }
+.header-title-wrapper {
+  display: flex;
+  cursor: pointer;
+}
 .header-logo {
   width: 35px;
   height: 30px;
-  cursor: pointer;
 }
 .header-title {
   font-weight: normal;
@@ -80,6 +80,8 @@ export default {
   }
 }
 .header-button {
+  outline: none;
+  transition: linear 0.2s;
   margin-left: auto;
   background: #59abff;
   border: 1px solid #59abff;

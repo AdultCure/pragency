@@ -149,6 +149,8 @@ export default {
   line-height: 17px;
 }
 .services-card-button {
+  outline: none;
+  transition: linear 0.2s;
   background: #59abff;
   border: 1px solid #59abff;
   box-sizing: border-box;

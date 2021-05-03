@@ -5,15 +5,30 @@
         <div class="modal-close" @click="closeModal">&#10006;</div>
         <div class="modal-content">
           <h3 class="modal-header">Авторизация</h3>
-          <input type="text" class="modal-input" placeholder="Логин" />
-          <input type="text" class="modal-input" placeholder="Пароль" />
-          <p class="modal-description">
-            Для авторизации в платформе требуется ввести логин и пароль,
-            созданные при регистрации
-          </p>
-          <p class="modal-ask">Вы еще не зарегистрированы в платформе ?</p>
-          <span class="modal-registration">Зарегистрироваться</span>
-          <button class="modal-button" @click="closeModal">Войти</button>
+          <form
+            action=""
+            @keydown.esc="closeModal"
+            @keydown.enter="closeModal"
+            @keydown.enter.prevent
+          >
+            <input
+              type="text"
+              class="modal-input"
+              placeholder="Логин"
+              ref="inputLogin"
+              v-bind="focusInput()"
+            />
+            <input type="text" class="modal-input" placeholder="Пароль" />
+            <p class="modal-description">
+              Для авторизации в платформе требуется ввести логин и пароль,
+              созданные при регистрации
+            </p>
+            <p class="modal-ask">Вы еще не зарегистрированы в платформе ?</p>
+            <span class="modal-registration">Зарегистрироваться</span>
+            <button class="modal-button" @click="closeModal" @click.prevent>
+              Войти
+            </button>
+          </form>
         </div>
       </div>
     </div>
@@ -29,6 +44,11 @@ export default {
     };
   },
   methods: {
+    focusInput() {
+      this.$nextTick(function() {
+        this.$refs.inputLogin.focus();
+      });
+    },
     closeModal() {
       this.show = false;
     },
@@ -108,6 +128,7 @@ export default {
   margin-bottom: 60px;
 }
 .modal-button {
+  transition: linear 0.2s;
   cursor: pointer;
   border: 1px solid #59abff;
   box-sizing: border-box;
@@ -126,7 +147,7 @@ export default {
 }
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 1s ease;
+  transition: opacity 0.3s ease;
 }
 .fade-enter-from,
 .fade-leave-to {
