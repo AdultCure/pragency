@@ -1,56 +1,77 @@
 <template>
   <transition name="fade">
-    <div class="modal-shadow" v-if="show" @mousedown.self="closeModal">
-      <div class="modal">
+    <div
+      class="modal-shadow"
+      @mousedown.self="closeModal"
+      @keydown.esc="closeModal"
+      v-show="showShadow"
+    >
+      <div class="modal" v-show="showAuth">
         <div class="modal-close" @click="closeModal">&#10006;</div>
         <div class="modal-content">
           <h3 class="modal-header">Авторизация</h3>
-          <form
-            action=""
-            @keydown.esc="closeModal"
-            @keydown.enter="closeModal"
-            @keydown.enter.prevent
-          >
+          <form action="" @submit="closeModal" @submit.prevent>
             <input
               type="text"
+              name="login"
               class="modal-input"
               placeholder="Логин"
-              ref="inputLogin"
-              v-bind="focusInput()"
+              v-model="login"
+              ref="loginInput"
             />
-            <input type="text" class="modal-input" placeholder="Пароль" />
+            <input
+              type="password"
+              class="modal-input"
+              placeholder="Пароль"
+              v-model="password"
+            />
             <p class="modal-description">
               Для авторизации в платформе требуется ввести логин и пароль,
               созданные при регистрации
             </p>
             <p class="modal-ask">Вы еще не зарегистрированы в платформе ?</p>
-            <span class="modal-registration">Зарегистрироваться</span>
-            <button class="modal-button" @click="closeModal" @click.prevent>
+            <span class="modal-registration" @click="openModalReg"
+              >Зарегистрироваться</span
+            >
+            <button class="modal-button">
               Войти
             </button>
           </form>
         </div>
       </div>
+      <modal-reg ref="modalReg" @closeRegModal="closeModal" />
     </div>
   </transition>
 </template>
 
 <script>
+import ModalReg from "./ModalReg.vue";
 export default {
+  components: {
+    ModalReg,
+  },
   name: "ModalAuth",
   data() {
     return {
-      show: false,
+      login: "",
+      password: "",
+      showAuth: false,
+      showShadow: false,
     };
   },
   methods: {
     focusInput() {
-      this.$nextTick(function() {
-        this.$refs.inputLogin.focus();
-      });
+      this.$refs.modalReg.$refs.nameInput.focus();
+    },
+    openModalReg() {
+      this.showAuth = false;
+      this.$refs.modalReg.showReg = true;
+      setTimeout(this.focusInput, 100);
     },
     closeModal() {
-      this.show = false;
+      this.showShadow = false;
+      this.showAuth = false;
+      this.$refs.modalReg.showReg = false;
     },
   },
 };

@@ -9,7 +9,7 @@
         <li class="menu-item" @click="$router.push('/')">Главная</li>
         <li class="menu-item" @click="$router.push('/services')">Услуги</li>
       </ul>
-      <button class="header-button" @click="showModal">
+      <button class="header-button" @click="openModalAuth()">
         Войти
       </button>
     </div>
@@ -25,9 +25,17 @@ export default {
   components: {
     ModalAuth,
   },
+  data() {
+    return {};
+  },
   methods: {
-    showModal() {
-      this.$refs.modalAuth.show = true;
+    focusInput() {
+      this.$refs.modalAuth.$refs.loginInput.focus();
+    },
+    openModalAuth() {
+      this.$refs.modalAuth.showShadow = true;
+      this.$refs.modalAuth.showAuth = true;
+      setTimeout(this.focusInput, 100);
     },
   },
 };
