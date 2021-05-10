@@ -17,7 +17,9 @@
             Предлагает рекламодателям достаточно широкий спектр рекламных услуг.
             Продвижение в социальных сетях, вирусный маркетинг.
           </p>
-          <button class="services-card-button">Заказать</button>
+          <button class="services-card-button" @click="openModal">
+            Заказать
+          </button>
         </div>
         <div class="services-card">
           <div class="services-card-title">
@@ -33,7 +35,9 @@
             случае, если реклама вашей организации или фирмы будет очень часто
             появляться на экранах телевизоров.
           </p>
-          <button class="services-card-button">Заказать</button>
+          <button class="services-card-button" @click="openModal">
+            Заказать
+          </button>
         </div>
         <div class="services-card">
           <div class="services-card-title">
@@ -48,7 +52,9 @@
             Печать рекламы на авто, действенный способ рассказать о своих
             услугах или товарах широкому кругу потенциальных потребителей.
           </p>
-          <button class="services-card-button">Заказать</button>
+          <button class="services-card-button" @click="openModal">
+            Заказать
+          </button>
         </div>
         <div class="services-card">
           <div class="services-card-title">
@@ -64,7 +70,9 @@
             при помощи различных видов носителей. Как и в любом другом важном
             деле
           </p>
-          <button class="services-card-button">Заказать</button>
+          <button class="services-card-button" @click="openModal">
+            Заказать
+          </button>
         </div>
         <div class="services-card">
           <div class="services-card-title">
@@ -79,22 +87,40 @@
             Большая часть рекламы на радио состоит из аудиороликов, длительность
             которых может варьироваться от пятнадцати секунд до минуты.
           </p>
-          <button class="services-card-button">Заказать</button>
+          <button class="services-card-button" @click="openModal">
+            Заказать
+          </button>
         </div>
       </div>
     </div>
     <main-footer />
+    <services-auth ref="servauth" />
   </div>
 </template>
 
 <script>
 import MainFooter from "../components/MainFooter.vue";
 import MainHeader from "../components/MainHeader.vue";
+import ServicesAuth from "../components/modal/ServicesAuth.vue";
 export default {
   name: "Services",
   components: {
     MainHeader,
     MainFooter,
+    ServicesAuth,
+  },
+  data() {
+    return {
+      isAuth: false,
+    };
+  },
+  methods: {
+    openModal() {
+      if (this.isAuth === false) {
+        this.$refs.servauth.showShadow = true;
+        this.$refs.servauth.showModalServices = true;
+      }
+    },
   },
 };
 </script>

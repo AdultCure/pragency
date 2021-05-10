@@ -72,6 +72,7 @@ export default {
       this.showShadow = false;
       this.showAuth = false;
       this.$refs.modalReg.showReg = false;
+      this.$emit("closeServModel");
     },
   },
 };
@@ -79,7 +80,7 @@ export default {
 
 <style lang="scss" scoped>
 .modal-shadow {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   min-height: 100vh;
