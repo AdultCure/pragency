@@ -8,10 +8,20 @@
       <ul class="header-menu">
         <li class="menu-item" @click="$router.push('/')">Главная</li>
         <li class="menu-item" @click="$router.push('/services')">Услуги</li>
+        <li
+          class="menu-item"
+          v-show="isAuth"
+          @click="$router.push('/services')"
+        >
+          Мои заказы
+        </li>
       </ul>
-      <button class="header-button" @click="openModalAuth()">
-        Войти
-      </button>
+      <div class="header-auth">
+        <span> {{ name }}</span>
+        <button class="header-button" @click="openModalAuth()">
+          Войти
+        </button>
+      </div>
     </div>
     <modal-auth ref="modalAuth" />
   </div>
@@ -26,7 +36,9 @@ export default {
     ModalAuth,
   },
   data() {
-    return {};
+    return {
+      isAuth: false,
+    };
   },
   methods: {
     focusInput() {
@@ -77,20 +89,21 @@ export default {
 .header-menu {
   display: flex;
   align-items: center;
-  margin-left: 50px;
+  margin-left: 20px;
+  max-width: 300px;
+  width: 100%;
   & li {
     cursor: pointer;
     font-size: 14px;
     color: #4d5155;
   }
-  & li:last-child {
-    margin-left: 30px;
-  }
+}
+.header-auth {
+  margin-left: auto;
 }
 .header-button {
   outline: none;
   transition: linear 0.2s;
-  margin-left: auto;
   background: #59abff;
   border: 1px solid #59abff;
   box-sizing: border-box;
@@ -107,6 +120,7 @@ export default {
   }
 }
 .menu-item {
+  margin-left: 30px;
   height: 20px;
   &:hover {
     border-bottom: 2px solid #59abff;
