@@ -10,16 +10,29 @@
         <li class="menu-item" @click="$router.push('/services')">Услуги</li>
         <li
           class="menu-item"
-          v-show="isAuth"
+          v-show="$store.state.isAuth"
           @click="$router.push('/services')"
         >
           Мои заказы
         </li>
       </ul>
       <div class="header-auth">
-        <span> {{ name }}</span>
-        <button class="header-button" @click="openModalAuth()">
+        <span class="header-user-name" v-show="$store.state.isAuth"
+          >Имя пользователя</span
+        >
+        <button
+          class="header-button"
+          @click="openModalAuth()"
+          v-show="$store.state.isAuth === false"
+        >
           Войти
+        </button>
+        <button
+          class="header-button"
+          @click="logOut"
+          v-show="$store.state.isAuth"
+        >
+          Выйти
         </button>
       </div>
     </div>
@@ -36,9 +49,7 @@ export default {
     ModalAuth,
   },
   data() {
-    return {
-      isAuth: false,
-    };
+    return {};
   },
   methods: {
     focusInput() {
@@ -48,6 +59,9 @@ export default {
       this.$refs.modalAuth.showShadow = true;
       this.$refs.modalAuth.showAuth = true;
       setTimeout(this.focusInput, 100);
+    },
+    logOut() {
+      this.$store.state.isAuth = false;
     },
   },
 };
@@ -100,6 +114,14 @@ export default {
 }
 .header-auth {
   margin-left: auto;
+}
+.header-user-name {
+  margin-right: 30px;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  color: #4d5155;
+  cursor: pointer;
 }
 .header-button {
   outline: none;

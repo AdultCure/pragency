@@ -6,47 +6,43 @@
       @keydown.esc="closeModal"
       v-show="showShadow"
     >
-      <div class="modal" v-show="showModalServices">
+      <div class="modal" v-show="showModalOrder">
         <div class="modal-close" @click="closeModal">&#10006;</div>
         <div class="modal-content">
-          <h2 class="modal-header">Вы должны быть авторизированы</h2>
           <p class="modal-text">
-            Для оформления заказа вам нужно быть зарегистрированным
-            пользователем нашей платформы.
+            Чтобы заказать услугу оставьте комментарий, вскором времени с вами
+            свяжется менеджер.<br />
+            Заказ можно отслеживать в “Мои заказы”
           </p>
-          <div class="modal-buttons">
-            <button class="modal-login" @click="showModalAuth">Войти</button>
-            <button class="modal-cancel" @click="closeModal">Отмена</button>
-          </div>
+          <h3 class="modal-comment">Комментарий:</h3>
+          <form action="" class="modal-form">
+            <textarea class="modal-input" name="comment" maxlength="2000" />
+            <div class="modal-buttons">
+              <button class="modal-order" @click.prevent>Заказать</button>
+              <button class="modal-cancel" @click="closeModal" @click.prevent>
+                Отмена
+              </button>
+            </div>
+          </form>
         </div>
       </div>
-      <modal-auth ref="modalAuth" @closeServModal="closeModal" />
     </div>
   </transition>
 </template>
 
 <script>
-import ModalAuth from "./ModalAuth.vue";
 export default {
-  name: "ServicesAuth",
-  components: {
-    ModalAuth,
-  },
+  name: "ServicesOrder",
   data() {
     return {
       showShadow: false,
-      showModalServices: false,
+      showModalOrder: false,
     };
   },
   methods: {
     closeModal() {
-      this.showModalServices = false;
+      this.showModalOrder = false;
       this.showShadow = false;
-    },
-    showModalAuth() {
-      this.showModalServices = false;
-      this.$refs.modalAuth.showShadow = true;
-      this.$refs.modalAuth.showAuth = true;
     },
   },
 };
@@ -62,7 +58,7 @@ export default {
   background: rgba(53, 53, 53, 0.3);
 }
 .modal {
-  max-width: 472px;
+  max-width: 1000px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -87,21 +83,36 @@ export default {
   margin: 30px 40px;
   display: flex;
   flex-direction: column;
-}
-.modal-header {
-  font-weight: 500;
-  font-size: 18px;
-  text-align: center;
-  color: #59abff;
-  max-width: 327px;
-  margin-bottom: 30px;
+  margin: 0 0 25px 85px;
 }
 .modal-text {
   font-weight: normal;
-  font-size: 14px;
-  line-height: 17px;
+  font-size: 18px;
+  line-height: 22px;
   color: #4d5155;
-  margin-bottom: 32px;
+  margin: 23px 0 25px;
+  max-width: 800px;
+}
+.modal-comment {
+  margin-bottom: 5px;
+  font-weight: normal;
+  font-size: 18px;
+  color: #353535;
+}
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+}
+.modal-input {
+  background: #f3f3f3;
+  border-radius: 8px;
+  outline: none;
+  border: none;
+  height: 204px;
+  padding: 10px;
+  resize: none;
+  margin-bottom: 25px;
 }
 .modal-buttons {
   max-width: 260px;
@@ -109,7 +120,7 @@ export default {
   margin: 0;
   align-self: flex-end;
 }
-.modal-login {
+.modal-order {
   background: #59abff;
   border: 1px solid #59abff;
   box-sizing: border-box;

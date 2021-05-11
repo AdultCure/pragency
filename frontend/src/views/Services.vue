@@ -95,6 +95,7 @@
     </div>
     <main-footer />
     <services-auth ref="servauth" />
+    <services-order ref="servorder" />
   </div>
 </template>
 
@@ -102,23 +103,26 @@
 import MainFooter from "../components/MainFooter.vue";
 import MainHeader from "../components/MainHeader.vue";
 import ServicesAuth from "../components/modal/ServicesAuth.vue";
+import ServicesOrder from "../components/modal/ServicesOrder.vue";
 export default {
   name: "Services",
   components: {
     MainHeader,
     MainFooter,
     ServicesAuth,
+    ServicesOrder,
   },
   data() {
-    return {
-      isAuth: false,
-    };
+    return {};
   },
   methods: {
     openModal() {
-      if (this.isAuth === false) {
+      if (this.$store.state.isAuth === false) {
         this.$refs.servauth.showShadow = true;
         this.$refs.servauth.showModalServices = true;
+      } else {
+        this.$refs.servorder.showShadow = true;
+        this.$refs.servorder.showModalOrder = true;
       }
     },
   },

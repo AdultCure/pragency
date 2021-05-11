@@ -33,7 +33,7 @@
             <span class="modal-registration" @click="openModalReg"
               >Зарегистрироваться</span
             >
-            <button class="modal-button">
+            <button class="modal-button" @click="logIn" @click.prevent>
               Войти
             </button>
           </form>
@@ -72,7 +72,14 @@ export default {
       this.showShadow = false;
       this.showAuth = false;
       this.$refs.modalReg.showReg = false;
-      this.$emit("closeServModel");
+      this.$emit("closeServModal");
+    },
+    logIn() {
+      this.$store.state.isAuth = true;
+      this.showShadow = false;
+      this.showAuth = false;
+      this.$refs.modalReg.showReg = false;
+      this.$emit("closeServModal");
     },
   },
 };
