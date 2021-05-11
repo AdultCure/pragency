@@ -68,7 +68,7 @@ import {
   email,
   minLength,
   sameAs,
-  alpha,
+  alphaNum,
 } from "@vuelidate/validators";
 import { reactive, computed } from "vue";
 export default {
@@ -87,8 +87,12 @@ export default {
         name: { required, minLength: minLength(6) },
         email: { required, email },
         password: {
-          password: { required, minLength: minLength(6), alpha },
-          confirm: { required, sameAs: sameAs(state.password.password), alpha },
+          password: { required, minLength: minLength(6), alphaNum },
+          confirm: {
+            required,
+            sameAs: sameAs(state.password.password),
+            alphaNum,
+          },
         },
       };
     });
