@@ -6,7 +6,7 @@
       </div>
       <div class="modal-content">
         <h3 class="modal-header">Регистрация</h3>
-        <form action="" @submit="submitForm" @submit.prevent>
+        <form action="" @submit.prevent="submitForm">
           <input
             ref="nameInput"
             id="name"
@@ -16,7 +16,7 @@
             :class="v$.name.$error ? 'form-error-input' : ''"
             placeholder="Ф.И.О"
           />
-          <p class="form-error" v-show="v$.name.$error">
+          <p class="form-error" v-if="v$.name.$error">
             Минимальная длинна ввода 6 символов
           </p>
           <input
@@ -27,7 +27,7 @@
             :class="v$.email.$error ? 'form-error-input' : ''"
             placeholder="E-mail"
           />
-          <p class="form-error" v-show="v$.email.$error">
+          <p class="form-error" v-if="v$.email.$error">
             Некорректный E-mail
           </p>
           <input
@@ -38,7 +38,7 @@
             :class="v$.password.password.$error ? 'form-error-input' : ''"
             placeholder="Пароль"
           />
-          <p class="form-error" v-show="v$.password.password.$error">
+          <p class="form-error" v-if="v$.password.password.$error">
             Минимальная длинна ввода 6 символов. Только латинские символы
           </p>
           <input
@@ -49,10 +49,10 @@
             :class="v$.password.confirm.$error ? 'form-error-input' : ''"
             placeholder="Повторите пароль"
           />
-          <p class="form-error" v-show="v$.password.confirm.$error">
+          <p class="form-error" v-if="v$.password.confirm.$error">
             Пароли не совпадают
           </p>
-          <button class="modal-button">
+          <button class="modal-button" type="submit">
             Зарегистрироваться
           </button>
         </form>
@@ -115,6 +115,13 @@ export default {
       if (!this.v$.$error) {
         this.showReg = false;
         this.$emit("closeRegModal");
+
+        const regFormData = {
+          name: this.state.name,
+          email: this.state.email,
+          password: this.state.password.password,
+        };
+        console.log(regFormData);
       }
     },
   },

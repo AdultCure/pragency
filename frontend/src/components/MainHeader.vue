@@ -1,20 +1,37 @@
 <template>
   <div class="main-header">
     <div class="header-wrapper">
-      <div class="header-title-wrapper" @click="$router.push('/')">
-        <img src="..\assets\pictures\logo.svg" alt="logo" class="header-logo" />
-        <h1 class="header-title">KS Creative</h1>
-      </div>
+      <router-link :to="{ name: 'Home' }"
+        ><div class="header-title-wrapper">
+          <img
+            src="..\assets\pictures\logo.svg"
+            alt="logo"
+            class="header-logo"
+          />
+          <h1 class="header-title">KS Creative</h1>
+        </div>
+      </router-link>
       <ul class="header-menu">
-        <li class="menu-item" @click="$router.push('/')">Главная</li>
-        <li class="menu-item" @click="$router.push('/services')">Услуги</li>
-        <li
+        <router-link
+          :to="{ name: 'Home' }"
+          active-class="menu-item-active"
           class="menu-item"
-          v-show="$store.state.isAuth"
-          @click="$router.push('/services')"
+          ><li>Главная</li></router-link
         >
-          Мои заказы
-        </li>
+        <router-link
+          :to="{ name: 'Services' }"
+          active-class="menu-item-active"
+          class="menu-item"
+          ><li>Услуги</li></router-link
+        >
+        <router-link
+          :to="{ name: 'Orders' }"
+          active-class="menu-item-active"
+          class="menu-item"
+          ><li v-show="$store.state.isAuth">
+            Мои заказы
+          </li>
+        </router-link>
       </ul>
       <div class="header-auth">
         <span class="header-user-name" v-show="$store.state.isAuth"
@@ -29,7 +46,10 @@
         </button>
         <button
           class="header-button"
-          @click="logOut"
+          @click="
+            logOut();
+            $router.push('/');
+          "
           v-show="$store.state.isAuth"
         >
           Выйти
@@ -147,5 +167,9 @@ export default {
   &:hover {
     border-bottom: 2px solid #59abff;
   }
+}
+.menu-item-active {
+  width: fit-content;
+  border-bottom: 2px solid #59abff;
 }
 </style>

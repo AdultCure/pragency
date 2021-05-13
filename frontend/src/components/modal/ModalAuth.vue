@@ -10,13 +10,13 @@
         <div class="modal-close" @click="closeModal">&#10006;</div>
         <div class="modal-content">
           <h3 class="modal-header">Авторизация</h3>
-          <form action="" @submit="closeModal" @submit.prevent>
+          <form action="" @submit.prevent="logIn">
             <input
               type="text"
               name="login"
               class="modal-input"
-              placeholder="Логин"
-              v-model="login"
+              placeholder="E-mail"
+              v-model="email"
               ref="loginInput"
             />
             <input
@@ -33,7 +33,7 @@
             <span class="modal-registration" @click="openModalReg"
               >Зарегистрироваться</span
             >
-            <button class="modal-button" @click="logIn" @click.prevent>
+            <button class="modal-button" type="submit">
               Войти
             </button>
           </form>
@@ -53,7 +53,7 @@ export default {
   name: "ModalAuth",
   data() {
     return {
-      login: "",
+      email: "",
       password: "",
       showAuth: false,
       showShadow: false,
@@ -80,6 +80,11 @@ export default {
       this.showAuth = false;
       this.$refs.modalReg.showReg = false;
       this.$emit("closeServModal");
+      const authFormData = {
+        email: this.email,
+        password: this.password,
+      };
+      console.log(authFormData);
     },
   },
 };

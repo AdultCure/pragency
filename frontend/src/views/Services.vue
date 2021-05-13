@@ -11,7 +11,7 @@
               alt="internet"
               class="services-card-img"
             />
-            <h2 class="services-card-header">Реклама в интернете</h2>
+            <h2 class="services-card-header">{{ $store.state.adList[0] }}</h2>
           </div>
           <p class="services-card-text">
             Предлагает рекламодателям достаточно широкий спектр рекламных услуг.
@@ -28,7 +28,7 @@
               alt="internet"
               class="services-card-img"
             />
-            <h2 class="services-card-header">Реклама на ТВ</h2>
+            <h2 class="services-card-header">{{ $store.state.adList[1] }}</h2>
           </div>
           <p class="services-card-text">
             Реклама на ТВ будет лучше работать и приносить прибыль только в том
@@ -46,7 +46,7 @@
               alt="internet"
               class="services-card-img"
             />
-            <h2 class="services-card-header">Рекламные производства</h2>
+            <h2 class="services-card-header">{{ $store.state.adList[2] }}</h2>
           </div>
           <p class="services-card-text">
             Печать рекламы на авто, действенный способ рассказать о своих
@@ -63,7 +63,7 @@
               alt="internet"
               class="services-card-img"
             />
-            <h2 class="services-card-header">Наружная Реклама</h2>
+            <h2 class="services-card-header">{{ $store.state.adList[3] }}</h2>
           </div>
           <p class="services-card-text">
             Наружная реклама направлена на привлечение потенциальных покупателей
@@ -81,7 +81,7 @@
               alt="internet"
               class="services-card-img"
             />
-            <h2 class="services-card-header">Реклама на радио</h2>
+            <h2 class="services-card-header">{{ $store.state.adList[4] }}</h2>
           </div>
           <p class="services-card-text">
             Большая часть рекламы на радио состоит из аудиороликов, длительность
