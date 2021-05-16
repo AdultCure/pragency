@@ -10,7 +10,7 @@ func (h *Handler) getAllOrders(c *gin.Context) {
 
 }
 
-func (h *Handler) getOrderById(c *gin.Context) {
+func (h *Handler) getOrdersById(c *gin.Context) {
 
 }
 
