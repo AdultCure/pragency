@@ -7,6 +7,7 @@ import (
 
 type Authorization interface {
 	CreateUser(user backend.User) (int, error)
+	GetUser(email, password string) (backend.User, error)
 }
 
 type Order interface {

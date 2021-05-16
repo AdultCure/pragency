@@ -7,6 +7,7 @@ import (
 
 type Authorization interface {
 	CreateUser(user backend.User) (int, error)
+	GenerateToken(email, password string) (string, error)
 }
 
 type Order interface {
@@ -20,6 +21,6 @@ type Service struct {
 
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
-		Authorization: NewAuthServise(repos.Authorization),
+		Authorization: NewAuthService(repos.Authorization),
 	}
 }
