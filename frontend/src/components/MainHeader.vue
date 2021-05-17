@@ -34,8 +34,12 @@
         </router-link>
       </ul>
       <div class="header-auth">
-        <span class="header-user-name" v-show="$store.state.isAuth"
-          >Имя пользователя</span
+        <router-link
+          :to="{ name: 'Profile' }"
+          active-class="menu-item-active"
+          class="header-user-name"
+          v-show="$store.state.isAuth"
+          >Имя пользователя</router-link
         >
         <button
           class="header-button"
