@@ -11,7 +11,7 @@ type Authorization interface {
 }
 
 type Order interface {
-
+	Create(userId int, order backend.Order) (int, error)
 }
 
 type Repository struct {
@@ -22,5 +22,6 @@ type Repository struct {
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		Authorization: NewAuthPostgres(db),
+		Order: NewOrderPostgres(db),
 	}
 }

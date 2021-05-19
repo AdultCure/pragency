@@ -6,18 +6,18 @@ CREATE TABLE users
     password_hash varchar(255) not null
 );
 
+CREATE TABLE orders
+(
+    id       serial       not null unique,
+    category varchar(255) not null,
+    status   varchar(255) not null,
+    date     varchar(255) not null,
+    comment  varchar(255) not null
+);
+
 CREATE TABLE users_list
 (
     id      serial                                      not null unique,
-    user_id int references users (id) on delete cascade not null
-);
-
-CREATE TABLE orders
-(
-    id       serial                                      not null unique,
-    category varchar(255)                                not null,
-    status   varchar(255)                                not null,
-    date     varchar(255)                                not null,
-    comment  varchar(255)                                not null,
-    user_id  int references users (id) on delete cascade not null
-);
+    user_id int references users (id) on delete cascade not null,
+    order_id int references orders (id) on delete cascade not null
+)

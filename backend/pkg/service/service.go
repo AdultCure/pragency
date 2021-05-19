@@ -12,7 +12,7 @@ type Authorization interface {
 }
 
 type Order interface {
-
+	Create(UserId int, order backend.Order) (int, error)
 }
 
 type Service struct {
@@ -23,5 +23,6 @@ type Service struct {
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Authorization: NewAuthService(repos.Authorization),
+		Order: NewOrderService(repos.Order),
 	}
 }
