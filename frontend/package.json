@@ -11,12 +11,14 @@
   "dependencies": {
     "@vuelidate/core": "*",
     "@vuelidate/validators": "*",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "node-sass": "^5.0.0",
     "normalize.css": "^8.0.1",
     "register-service-worker": "^1.7.1",
     "sass-loader": "^10.1.1",
     "vue": "^3.0.0",
+    "vue-axios": "^3.2.4",
     "vue-router": "^4.0.0-0",
     "vuelidate": "^0.7.6",
     "vuex": "^4.0.0-0"

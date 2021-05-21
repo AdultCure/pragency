@@ -10,7 +10,7 @@
         <div class="modal-close" @click="closeModal">&#10006;</div>
         <div class="modal-content">
           <h3 class="modal-header">Авторизация</h3>
-          <form action="" @submit.prevent="logIn">
+          <form action="" @submit.prevent="formSubmit">
             <input
               type="text"
               name="login"
@@ -57,6 +57,7 @@ export default {
       password: "",
       showAuth: false,
       showShadow: false,
+      errors: [],
     };
   },
   methods: {
@@ -74,18 +75,81 @@ export default {
       this.$refs.modalReg.showReg = false;
       this.$emit("closeServModal");
     },
-    logIn() {
-      this.$store.state.isAuth = true;
-      this.showShadow = false;
-      this.showAuth = false;
-      this.$refs.modalReg.showReg = false;
-      this.$emit("closeServModal");
-      const authFormData = {
-        email: this.email,
-        password: this.password,
-      };
-      console.log(authFormData);
+    // logIn() {
+    //   this.$store.state.isAuth = true;
+    //   this.showShadow = false;
+    //   this.showAuth = false;
+    //   this.$refs.modalReg.showReg = false;
+    //   this.$emit("closeServModal");
+    //   const authFormData = {
+    //     email: this.email,
+    //     password: this.password,
+    //   };
+    //   console.log(authFormData);
+    // },
+    formSubmit() {
+      this.signIn();
     },
+    async signIn() {
+      // const res = await fetch("http://localhost:8000/auth/sign-in", {
+      //   mode: "no-cors",
+      //   method: "POST",
+      //   headers: {
+      //     "Access-Control-Allow-Origin": "*",
+      //     "Content-Type": "application/json",
+      //   },
+      //   credentials: "include",
+      //   body: JSON.stringify({
+      //     email: this.email,
+      //     password: this.password,
+      //   }),
+      // });
+      // console.log(res);
+      this.$store.state.isAuth = true;
+      this.closeModal();
+    },
+    // async signIn() {
+    //   try {
+    //     const data = (
+    //       await this.$api.auth.signIn({
+    //         email: this.email,
+    //         password: this.password,
+    //       })
+    //     ).data;
+    //     localStorage.setItem("user", JSON.stringify(data));
+    //     this.$store.dispatch("user/setUser", data);
+    //     this.closeModal();
+    //   } catch (error) {
+    //     console.log("error");
+    //   }
+    // },
+    // async signIn() {
+    //   try {
+    //     const res = await fetch("http://localhost:8000/auth/sign-in", {
+    //       mode: "no-cors",
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       credentials: "include",
+    //       body: JSON.stringify({
+    //         email: this.email,
+    //         password: this.password,
+    //       }),
+    //     });
+    //     const data = await res.json();
+    //     if (res.status === 200 || res.status === 201) {
+    //       localStorage.setItem("user", JSON.stringify(data));
+    //       this.store.dispatch("user/setUser", data);
+    //       this.closeModal();
+    //     } else {
+    //       this.errors = data;
+    //       console.error(data);
+    //     }
+    //   } catch (error) {
+    //     console.log("err");
+    //   }
+    // },
   },
 };
 </script>

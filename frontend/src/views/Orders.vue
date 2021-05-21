@@ -19,7 +19,9 @@
               rows="10"
             ></textarea>
           </div>
-          <button class="orders-status">Статус заказа</button>
+          <router-link :to="{ name: 'Status' }" class="orders-link"
+            ><button class="orders-status">Статус заказа</button></router-link
+          >
         </div>
         <div class="orders-card">
           <ul class="orders-card-content">
@@ -123,12 +125,17 @@ export default {
   height: 31px;
   cursor: pointer;
   transition: linear 0.2s;
-  align-self: flex-end;
-  margin: 0 0 -23px 23px;
   &:hover {
     background: #fff;
     color: #59abff;
   }
+}
+.orders-link {
+  align-self: flex-end;
+  margin: 0 0 -23px 23px;
+  max-width: 200px;
+  width: 100%;
+  height: 31px;
 }
 .orders-card {
   background: #ffffff;
