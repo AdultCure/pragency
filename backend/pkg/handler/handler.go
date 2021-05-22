@@ -22,12 +22,12 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		auth.POST("/sign-in", h.signIn)
 	}
 
-	api := router.Group("/api")
+	api := router.Group("/api", h.userIdentity)
 	{
 		order := api.Group("/order")
 		{
-			order.POST("/", h.createOrder)
-			order.GET("/", h.getAllOrders)
+			order.POST("", h.createOrder)
+			order.GET("", h.getAllOrders)
 			order.GET("/:id", h.getOrdersById)
 			order.PUT("/:id", h.updateOrder)
 			order.DELETE("/:id", h.deleteOrder)
