@@ -2,34 +2,36 @@
   <div class="orders">
     <main-header />
     <div class="orders-wrapper">
-      <div class="orders-content">
-        <div class="orders-card-active">
-          <div class="orders-card-info">
-            <h2 class="orders-name-active">{{ $store.state.adList[0] }}</h2>
-            <span class="orders-number-active">Номер заказа №123456789</span>
-            <span class="orders-date-active"
-              >Дата создание заказа (25.05.2021)</span
+      <div class="orders-content" v-if="fullUserAdList.length">
+        <div
+          class="orders-card"
+          v-for="userAd of fullUserAdList"
+          :key="userAd.id"
+        >
+          <router-link :to="{ name: 'Status' }" class="router"
+            ><ul
+              class="orders-card-content active-card"
+              @click="
+                $store.state.selectAd.name = userAd.name;
+                $store.state.selectAd.data = userAd.data;
+                $store.state.selectAd.id = userAd.id;
+                $store.state.selectAd.comment = userAd.comment;
+              "
             >
-            <span class="orders-comment">Ваш комментарий:</span>
-            <textarea
-              disabled
-              class="orders-comment-text"
-              name="comment"
-              cols="30"
-              rows="10"
-            ></textarea>
-          </div>
-          <router-link :to="{ name: 'Status' }" class="orders-link"
-            ><button class="orders-status">Статус заказа</button></router-link
+              <li class="orders-name">{{ userAd.name }}</li>
+              <li class="orders-date">{{ userAd.data }}</li>
+              <li class="orders-number">{{ userAd.id }}</li>
+            </ul></router-link
           >
         </div>
-        <div class="orders-card">
-          <ul class="orders-card-content">
-            <li class="orders-name">{{ $store.state.adList[4] }}</li>
-            <li class="orders-date">25.05.2021</li>
-            <li class="orders-number">Номер заказа №123456789</li>
-          </ul>
-        </div>
+      </div>
+      <div class="orders-no-cards" v-else>
+        <h3 class="orders-no-cards-header">
+          Тут пока ничего нет. Вы можете заказать услугу
+          <router-link :to="{ name: 'Services' }" class="orders-no-cards-link"
+            >здесь</router-link
+          >
+        </h3>
       </div>
     </div>
     <main-footer />
@@ -37,6 +39,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import MainFooter from "../components/MainFooter.vue";
 import MainHeader from "../components/MainHeader.vue";
 export default {
@@ -45,109 +48,44 @@ export default {
     MainHeader,
   },
   name: "Orders",
+  data() {
+    return {};
+  },
+  computed: mapGetters(["fullUserAdList"]),
 };
 </script>
 
 <style lang="scss" scoped>
 .orders-wrapper {
-  min-height: calc(100vh - 80px - 80px);
+  min-height: calc(100vh - 220px);
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
+}
+.router {
+  color: #4d5155;
+}
+.active-card:hover {
+  color: #59abff;
 }
 .orders-content {
   max-width: 1210px;
   padding: 0 115px;
 }
-.orders-card-active {
-  margin: 50px 0 40px;
-  background: #ffffff;
-  border: 1px solid #d0d0d0;
-  box-sizing: border-box;
-  box-shadow: 0px 1px 8px 1px rgba(0, 0, 0, 0.1);
-  border-radius: 13px;
-  display: flex;
-  flex-direction: row;
-  padding: 20px 50px 50px 33px;
-  justify-content: space-between;
-}
-.orders-card-info {
-  max-width: 700px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-.orders-name-active {
-  font-weight: normal;
-  font-size: 24px;
-  line-height: 29px;
-  color: #59abff;
-}
-.orders-number-active {
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 17px;
-  margin-bottom: 30px;
-}
-.orders-date-active {
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 17px;
-  margin-bottom: 13px;
-}
-.orders-comment {
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 17px;
-  color: #59abff;
-  margin-bottom: 6px;
-}
-.orders-comment-text {
-  height: 150px;
-  background: #f3f3f3;
-  border-radius: 8px;
-  outline: none;
-  border: none;
-  resize: none;
-}
-.orders-status {
-  background: #59abff;
-  border: 1px solid #59abff;
-  box-sizing: border-box;
-  box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 17px;
-  color: #ffffff;
-  max-width: 200px;
-  width: 100%;
-  height: 31px;
-  cursor: pointer;
-  transition: linear 0.2s;
-  &:hover {
-    background: #fff;
-    color: #59abff;
-  }
-}
-.orders-link {
-  align-self: flex-end;
-  margin: 0 0 -23px 23px;
-  max-width: 200px;
-  width: 100%;
-  height: 31px;
-}
 .orders-card {
+  height: 80px;
   background: #ffffff;
   border: 1px solid #d0d0d0;
   box-sizing: border-box;
   box-shadow: 0px 1px 8px 1px rgba(0, 0, 0, 0.1);
   border-radius: 13px;
-  padding: 30px 25px;
-  margin-bottom: 40px;
+  margin: 60px 0;
 }
 .orders-card-content {
   display: flex;
+  height: 80px;
+  align-items: center;
+  padding-left: 25px;
   flex-direction: row;
 }
 .orders-name {
@@ -169,5 +107,25 @@ export default {
   line-height: 17px;
   margin-left: auto;
   padding-right: 80px;
+}
+.orders-no-cards {
+  background: #ffffff;
+  border: 1px solid #d0d0d0;
+  box-sizing: border-box;
+  box-shadow: 0px 1px 8px 1px rgba(0, 0, 0, 0.1);
+  border-radius: 13px;
+  height: 60px;
+  margin-top: 60px;
+  padding-left: 30px;
+  display: flex;
+  align-items: center;
+}
+.orders-no-cards-header {
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 29px;
+}
+.orders-no-cards-link {
+  color: #59abff;
 }
 </style>

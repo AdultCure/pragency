@@ -16,9 +16,16 @@
           </p>
           <h3 class="modal-comment">Комментарий:</h3>
           <form action="" class="modal-form">
-            <textarea class="modal-input" name="comment" maxlength="2000" />
+            <textarea
+              class="modal-input"
+              name="comment"
+              maxlength="2000"
+              v-model="comment"
+            />
             <div class="modal-buttons">
-              <button class="modal-order" @click.prevent>Заказать</button>
+              <button class="modal-order" @click.prevent="create">
+                Заказать
+              </button>
               <button class="modal-cancel" @click="closeModal" @click.prevent>
                 Отмена
               </button>
@@ -37,12 +44,18 @@ export default {
     return {
       showShadow: false,
       showModalOrder: false,
+      comment: "",
     };
   },
   methods: {
     closeModal() {
       this.showModalOrder = false;
       this.showShadow = false;
+    },
+    create() {
+      this.$emit("submitHandler");
+      this.closeModal();
+      this.$router.push("orders");
     },
   },
 };

@@ -4,90 +4,26 @@
     <div class="services-wrapper">
       <h2 class="services-header">Услуги</h2>
       <div class="services-content">
-        <div class="services-card">
+        <div class="services-card" v-for="ad of fullAdList" :key="ad.name">
           <div class="services-card-title">
             <img
-              src="../assets/pictures/adinternet.svg"
-              alt="internet"
+              v-bind:src="getImgUrl(ad.img)"
+              alt="picture"
               class="services-card-img"
             />
-            <h2 class="services-card-header">{{ $store.state.adList[0] }}</h2>
+            <h2 class="services-card-header">{{ ad.name }}</h2>
           </div>
           <p class="services-card-text">
-            Предлагает рекламодателям достаточно широкий спектр рекламных услуг.
-            Продвижение в социальных сетях, вирусный маркетинг.
+            {{ ad.description }}
           </p>
-          <button class="services-card-button" @click="openModal">
-            Заказать
-          </button>
-        </div>
-        <div class="services-card">
-          <div class="services-card-title">
-            <img
-              src="../assets/pictures/adtv.svg"
-              alt="internet"
-              class="services-card-img"
-            />
-            <h2 class="services-card-header">{{ $store.state.adList[1] }}</h2>
-          </div>
-          <p class="services-card-text">
-            Реклама на ТВ будет лучше работать и приносить прибыль только в том
-            случае, если реклама вашей организации или фирмы будет очень часто
-            появляться на экранах телевизоров.
-          </p>
-          <button class="services-card-button" @click="openModal">
-            Заказать
-          </button>
-        </div>
-        <div class="services-card">
-          <div class="services-card-title">
-            <img
-              src="../assets/pictures/adproduction.svg"
-              alt="internet"
-              class="services-card-img"
-            />
-            <h2 class="services-card-header">{{ $store.state.adList[2] }}</h2>
-          </div>
-          <p class="services-card-text">
-            Печать рекламы на авто, действенный способ рассказать о своих
-            услугах или товарах широкому кругу потенциальных потребителей.
-          </p>
-          <button class="services-card-button" @click="openModal">
-            Заказать
-          </button>
-        </div>
-        <div class="services-card">
-          <div class="services-card-title">
-            <img
-              src="../assets/pictures/adout.svg"
-              alt="internet"
-              class="services-card-img"
-            />
-            <h2 class="services-card-header">{{ $store.state.adList[3] }}</h2>
-          </div>
-          <p class="services-card-text">
-            Наружная реклама направлена на привлечение потенциальных покупателей
-            при помощи различных видов носителей. Как и в любом другом важном
-            деле
-          </p>
-          <button class="services-card-button" @click="openModal">
-            Заказать
-          </button>
-        </div>
-        <div class="services-card">
-          <div class="services-card-title">
-            <img
-              src="../assets/pictures/adradio.svg"
-              alt="internet"
-              class="services-card-img"
-            />
-            <h2 class="services-card-header">{{ $store.state.adList[4] }}</h2>
-          </div>
-          <p class="services-card-text">
-            Большая часть рекламы на радио состоит из аудиороликов, длительность
-            которых может варьироваться от пятнадцати секунд до минуты.
-          </p>
-          <button class="services-card-button" @click="openModal">
+          <button
+            class="services-card-button"
+            @click="
+              selectAd.name = ad.name;
+              selectAd.description = ad.description;
+              openModal();
+            "
+          >
             Заказать
           </button>
         </div>
@@ -95,11 +31,13 @@
     </div>
     <main-footer />
     <services-auth ref="servauth" />
-    <services-order ref="servorder" />
+    <services-order ref="servorder" @submitHandler="submit()" />
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import { mapMutations } from "vuex";
 import MainFooter from "../components/MainFooter.vue";
 import MainHeader from "../components/MainHeader.vue";
 import ServicesAuth from "../components/modal/ServicesAuth.vue";
@@ -113,9 +51,30 @@ export default {
     ServicesOrder,
   },
   data() {
-    return {};
+    return {
+      selectAd: {
+        name: "",
+        description: "",
+        comment: "",
+      },
+    };
   },
+  computed: mapGetters(["fullAdList", "fullUserAdList"]),
   methods: {
+    ...mapMutations(["createAd"]),
+    submit() {
+      let Data = new Date();
+      let Year = Data.getFullYear();
+      let Month = Data.getMonth();
+      let Day = Data.getDate();
+      this.createAd({
+        name: this.selectAd.name,
+        description: this.selectAd.description,
+        comment: this.$refs.servorder.comment,
+        id: Date.now(),
+        data: Day + "." + (Month + 1) + "." + Year,
+      });
+    },
     openModal() {
       if (this.$store.state.isAuth === false) {
         this.$refs.servauth.showShadow = true;
@@ -125,13 +84,16 @@ export default {
         this.$refs.servorder.showModalOrder = true;
       }
     },
+    getImgUrl(pic) {
+      return require("../assets/pictures/" + pic);
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .services-wrapper {
-  min-height: calc(100vh - 80px - 80px);
+  min-height: calc(100vh - 220px);
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
@@ -170,6 +132,10 @@ export default {
   font-size: 36px;
   line-height: 44px;
   margin-left: 30px;
+}
+.services-card-image {
+  width: 150px;
+  height: 150px;
 }
 .services-card-text {
   height: 55px;
