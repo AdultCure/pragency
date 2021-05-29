@@ -113,7 +113,9 @@ export default {
     ServicesOrder,
   },
   data() {
-    return {};
+    return {
+
+    };
   },
   methods: {
     openModal() {
@@ -196,6 +198,7 @@ export default {
   align-self: flex-end;
   margin: 0 65px 25px 0;
   cursor: pointer;
+
   &:hover {
     background: #fff;
     color: #59abff;

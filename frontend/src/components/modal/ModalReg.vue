@@ -8,46 +8,46 @@
         <h3 class="modal-header">Регистрация</h3>
         <form action="" @submit.prevent="submitForm">
           <input
-            ref="nameInput"
-            id="name"
-            v-model="state.name"
-            type="text"
-            class="modal-input"
-            :class="v$.name.$error ? 'form-error-input' : ''"
-            placeholder="Ф.И.О"
+              ref="nameInput"
+              id="name"
+              v-model="state.name"
+              type="text"
+              class="modal-input"
+              :class="v$.name.$error ? 'form-error-input' : ''"
+              placeholder="Ф.И.О"
           />
           <p class="form-error" v-if="v$.name.$error">
             Минимальная длинна ввода 6 символов
           </p>
           <input
-            id="email"
-            v-model="state.email"
-            type.prevent="email"
-            class="modal-input"
-            :class="v$.email.$error ? 'form-error-input' : ''"
-            placeholder="E-mail"
+              id="email"
+              v-model="state.email"
+              type.prevent="email"
+              class="modal-input"
+              :class="v$.email.$error ? 'form-error-input' : ''"
+              placeholder="E-mail"
           />
           <p class="form-error" v-if="v$.email.$error">
             Некорректный E-mail
           </p>
           <input
-            id="password"
-            v-model="state.password.password"
-            type="password"
-            class="modal-input"
-            :class="v$.password.password.$error ? 'form-error-input' : ''"
-            placeholder="Пароль"
+              id="password"
+              v-model="state.password.password"
+              type="password"
+              class="modal-input"
+              :class="v$.password.password.$error ? 'form-error-input' : ''"
+              placeholder="Пароль"
           />
           <p class="form-error" v-if="v$.password.password.$error">
             Минимальная длинна ввода 6 символов. Только латинские символы
           </p>
           <input
-            id="repeatPassword"
-            v-model="state.password.confirm"
-            type="password"
-            class="modal-input"
-            :class="v$.password.confirm.$error ? 'form-error-input' : ''"
-            placeholder="Повторите пароль"
+              id="repeatPassword"
+              v-model="state.password.confirm"
+              type="password"
+              class="modal-input"
+              :class="v$.password.confirm.$error ? 'form-error-input' : ''"
+              placeholder="Повторите пароль"
           />
           <p class="form-error" v-if="v$.password.confirm.$error">
             Пароли не совпадают
@@ -63,14 +63,10 @@
 
 <script>
 import useValidate from "@vuelidate/core";
-import {
-  required,
-  email,
-  minLength,
-  sameAs,
-  alphaNum,
-} from "@vuelidate/validators";
-import { reactive, computed } from "vue";
+import {alphaNum, email, minLength, required, sameAs,} from "@vuelidate/validators";
+import {computed, reactive} from "vue";
+import axios from "axios";
+
 export default {
   name: "ModalReg",
   setup() {
@@ -84,10 +80,10 @@ export default {
     });
     const rules = computed(() => {
       return {
-        name: { required, minLength: minLength(6) },
-        email: { required, email },
+        name: {required, minLength: minLength(6)},
+        email: {required, email},
         password: {
-          password: { required, minLength: minLength(6), alphaNum },
+          password: {required, minLength: minLength(6), alphaNum},
           confirm: {
             required,
             sameAs: sameAs(state.password.password),
@@ -115,15 +111,21 @@ export default {
       if (!this.v$.$error) {
         this.showReg = false;
         this.$emit("closeRegModal");
-
-        const regFormData = {
-          name: this.state.name,
-          email: this.state.email,
-          password: this.state.password.password,
-        };
-        console.log(regFormData);
+        this.regPost()
       }
     },
+
+    async regPost() {
+      await axios.post(`http://localhost:8000/auth/sign-up`,
+          {
+            "name": this.state.name.toString(),
+            "email": this.state.email.toString(),
+            "password": this.state.password.password.toString()
+          })
+          .then(response => {
+            console.log(response);
+      })
+    }
   },
 };
 </script>
@@ -144,17 +146,20 @@ export default {
   transform: translate(-50%, -50%);
   padding: 15px;
 }
+
 .modal-close {
   cursor: pointer;
   width: 12px;
   height: 12px;
   color: #a0a0a0;
 }
+
 .modal-content {
   margin: 48px 50px 78px;
   max-width: 220px;
   width: 100%;
 }
+
 .modal-header {
   font-weight: 500;
   font-size: 18px;
@@ -163,6 +168,7 @@ export default {
   text-align: center;
   margin-bottom: 57px;
 }
+
 .modal-input {
   font-size: 14px;
   line-height: 15px;
@@ -176,6 +182,7 @@ export default {
   height: 35px;
   margin-bottom: 30px;
 }
+
 .modal-button {
   transition: linear 0.2s;
   cursor: pointer;
@@ -189,10 +196,13 @@ export default {
   height: 43px;
   color: #ffffff;
   font-size: 12px;
-  &:hover {
-    background: #fff;
-    color: #59abff;
-  }
+
+&
+:hover {
+  background: #fff;
+  color: #59abff;
+}
+
 }
 .form-error {
   font-size: 12px;
@@ -200,13 +210,16 @@ export default {
   margin-top: -25px;
   padding-left: 10px;
 }
+
 .form-error-input {
   border-bottom: 1px solid #ff2626;
 }
+
 .fadereg-enter-active,
 .fadereg-leave-active {
   transition: opacity 0.3s ease;
 }
+
 .fadereg-enter-from,
 .fadereg-leave-to {
   opacity: 0;
