@@ -5,9 +5,9 @@ import "errors"
 type Order struct {
 	Id       int    `json:"id" db:"id"`
 	Category string `json:"category" db:"category" binding:"required"`
-	Status   string `json:"status" db:"status"`
+	Status   string `json:"status" db:"status" binding:"required"`
 	Date     string `json:"date" db:"date" binding:"required"`
-	Comment  string `json:"comment" db:"comment"`
+	Comment  string `json:"comment" db:"comment" binding:"required"`
 	UserId   string `json:"user_id"`
 }
 
