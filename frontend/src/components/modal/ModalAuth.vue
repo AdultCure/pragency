@@ -1,10 +1,10 @@
 <template>
   <transition name="fade">
     <div
-      class="modal-shadow"
-      @mousedown.self="closeModal"
-      @keydown.esc="closeModal"
-      v-show="showShadow"
+        class="modal-shadow"
+        @mousedown.self="closeModal"
+        @keydown.esc="closeModal"
+        v-show="showShadow"
     >
       <div class="modal" v-show="showAuth">
         <div class="modal-close" @click="closeModal">&#10006;</div>
@@ -12,18 +12,18 @@
           <h3 class="modal-header">Авторизация</h3>
           <form action="" @submit.prevent="formSubmit">
             <input
-              type="text"
-              name="login"
-              class="modal-input"
-              placeholder="E-mail"
-              v-model="email"
-              ref="loginInput"
+                type="text"
+                name="login"
+                class="modal-input"
+                placeholder="E-mail"
+                v-model="email"
+                ref="loginInput"
             />
             <input
-              type="password"
-              class="modal-input"
-              placeholder="Пароль"
-              v-model="password"
+                type="password"
+                class="modal-input"
+                placeholder="Пароль"
+                v-model="password"
             />
             <p class="modal-description">
               Для авторизации в платформе требуется ввести логин и пароль,
@@ -31,7 +31,7 @@
             </p>
             <p class="modal-ask">Вы еще не зарегистрированы в платформе ?</p>
             <span class="modal-registration" @click="openModalReg"
-              >Зарегистрироваться</span
+            >Зарегистрироваться</span
             >
             <button class="modal-button" type="submit">
               Войти
@@ -39,13 +39,15 @@
           </form>
         </div>
       </div>
-      <modal-reg ref="modalReg" @closeRegModal="closeModal" />
+      <modal-reg ref="modalReg" @closeRegModal="closeModal"/>
     </div>
   </transition>
 </template>
 
 <script>
 import ModalReg from "./ModalReg.vue";
+import axios from "axios";
+
 export default {
   components: {
     ModalReg,
@@ -75,81 +77,25 @@ export default {
       this.$refs.modalReg.showReg = false;
       this.$emit("closeServModal");
     },
-    // logIn() {
-    //   this.$store.state.isAuth = true;
-    //   this.showShadow = false;
-    //   this.showAuth = false;
-    //   this.$refs.modalReg.showReg = false;
-    //   this.$emit("closeServModal");
-    //   const authFormData = {
-    //     email: this.email,
-    //     password: this.password,
-    //   };
-    //   console.log(authFormData);
-    // },
     formSubmit() {
       this.signIn();
     },
-    async signIn() {
-      // const res = await fetch("http://localhost:8000/auth/sign-in", {
-      //   mode: "no-cors",
-      //   method: "POST",
-      //   headers: {
-      //     "Access-Control-Allow-Origin": "*",
-      //     "Content-Type": "application/json",
-      //   },
-      //   credentials: "include",
-      //   body: JSON.stringify({
-      //     email: this.email,
-      //     password: this.password,
-      //   }),
-      // });
-      // console.log(res);
-      this.$store.state.isAuth = true;
-      this.closeModal();
+    signIn() {
+      axios.post(`http://localhost:8000/auth/sign-in`,
+          {
+            "email": this.email.toString(),
+            "password": this.password.toString()
+          })
+          .then(response => {
+            console.log("Спасибо !", response.data.token)
+
+            this.$store.state.isAuth = true;
+            this.closeModal();
+          })
+          .catch(error => {
+            console.log("Ошибка axios запроса", error.data)
+          })
     },
-    // async signIn() {
-    //   try {
-    //     const data = (
-    //       await this.$api.auth.signIn({
-    //         email: this.email,
-    //         password: this.password,
-    //       })
-    //     ).data;
-    //     localStorage.setItem("user", JSON.stringify(data));
-    //     this.$store.dispatch("user/setUser", data);
-    //     this.closeModal();
-    //   } catch (error) {
-    //     console.log("error");
-    //   }
-    // },
-    // async signIn() {
-    //   try {
-    //     const res = await fetch("http://localhost:8000/auth/sign-in", {
-    //       mode: "no-cors",
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       credentials: "include",
-    //       body: JSON.stringify({
-    //         email: this.email,
-    //         password: this.password,
-    //       }),
-    //     });
-    //     const data = await res.json();
-    //     if (res.status === 200 || res.status === 201) {
-    //       localStorage.setItem("user", JSON.stringify(data));
-    //       this.store.dispatch("user/setUser", data);
-    //       this.closeModal();
-    //     } else {
-    //       this.errors = data;
-    //       console.error(data);
-    //     }
-    //   } catch (error) {
-    //     console.log("err");
-    //   }
-    // },
   },
 };
 </script>
@@ -163,6 +109,7 @@ export default {
   width: 100%;
   background: rgba(53, 53, 53, 0.3);
 }
+
 .modal {
   max-width: 320px;
   width: 100%;
@@ -178,17 +125,20 @@ export default {
   transform: translate(-50%, -50%);
   padding: 15px;
 }
+
 .modal-close {
   cursor: pointer;
   width: 12px;
   height: 12px;
   color: #a0a0a0;
 }
+
 .modal-content {
   margin: 48px 50px 78px;
   max-width: 220px;
   width: 100%;
 }
+
 .modal-header {
   font-weight: 500;
   font-size: 18px;
@@ -197,6 +147,7 @@ export default {
   text-align: center;
   margin-bottom: 57px;
 }
+
 .modal-input {
   font-size: 14px;
   line-height: 15px;
@@ -210,14 +161,17 @@ export default {
   height: 35px;
   margin-bottom: 30px;
 }
+
 .modal-description {
   font-size: 12px;
   color: #a0a0a0;
 }
+
 .modal-ask {
   color: #a0a0a0;
   font-size: 10px;
 }
+
 .modal-registration {
   cursor: pointer;
   display: block;
@@ -225,6 +179,7 @@ export default {
   color: #ff2626;
   margin-bottom: 60px;
 }
+
 .modal-button {
   transition: linear 0.2s;
   cursor: pointer;
@@ -238,15 +193,19 @@ export default {
   height: 43px;
   color: #ffffff;
   font-size: 12px;
-  &:hover {
-    background: #fff;
-    color: #59abff;
-  }
+
+&
+:hover {
+  background: #fff;
+  color: #59abff;
+}
+
 }
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;

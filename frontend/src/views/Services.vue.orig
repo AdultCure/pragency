@@ -4,7 +4,7 @@
     <div class="services-wrapper">
       <h2 class="services-header">Услуги</h2>
       <div class="services-content">
-        <div class="services-card">
+        <div class="services-card" v-for="ad of fullAdList" :key="ad.name">
           <div class="services-card-title">
             <img
               v-bind:src="getImgUrl(ad.img)"
@@ -52,6 +52,16 @@ export default {
   },
   data() {
     return {
+<<<<<<< HEAD
+      selectAd: {
+        name: "",
+        description: "",
+        comment: "",
+      },
+=======
+
+>>>>>>> backend_1
+    };
   },
   computed: mapGetters(["fullAdList", "fullUserAdList"]),
   methods: {
@@ -126,6 +136,10 @@ export default {
   font-size: 36px;
   line-height: 44px;
   margin-left: 30px;
+}
+.services-card-image {
+  width: 150px;
+  height: 150px;
 }
 .services-card-text {
   height: 55px;
