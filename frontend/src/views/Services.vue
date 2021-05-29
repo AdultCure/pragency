@@ -4,12 +4,12 @@
     <div class="services-wrapper">
       <h2 class="services-header">Услуги</h2>
       <div class="services-content">
-        <div class="services-card">
+        <div class="services-card" v-for="ad of fullAdList" :key="ad.name">
           <div class="services-card-title">
             <img
-              v-bind:src="getImgUrl(ad.img)"
-              alt="picture"
-              class="services-card-img"
+                v-bind:src="getImgUrl(ad.img)"
+                alt="picture"
+                class="services-card-img"
             />
             <h2 class="services-card-header">{{ ad.name }}</h2>
           </div>
@@ -17,8 +17,8 @@
             {{ ad.description }}
           </p>
           <button
-            class="services-card-button"
-            @click="
+              class="services-card-button"
+              @click="
               selectAd.name = ad.name;
               selectAd.description = ad.description;
               openModal();
@@ -52,6 +52,12 @@ export default {
   },
   data() {
     return {
+        selectAd: {
+      name: "",
+      description: "",
+      comment: "",
+    },
+  };
   },
   computed: mapGetters(["fullAdList", "fullUserAdList"]),
   methods: {
@@ -127,6 +133,10 @@ export default {
   line-height: 44px;
   margin-left: 30px;
 }
+.services-card-image {
+  width: 150px;
+  height: 150px;
+}
 .services-card-text {
   height: 55px;
   margin: 0 40px 23px;
@@ -153,9 +163,9 @@ export default {
   margin: 0 65px 25px 0;
   cursor: pointer;
 
-  &:hover {
-    background: #fff;
-    color: #59abff;
-  }
+&:hover {
+   background: #fff;
+   color: #59abff;
+ }
 }
 </style>
