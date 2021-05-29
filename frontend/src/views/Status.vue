@@ -55,9 +55,9 @@
           </div>
           <div class="status-line"></div>
           <div class="status-info">
-            <h2 class="status-name">{{ $store.state.adList[0] }}</h2>
-            <span class="status-number">Номер заказа №123456789</span>
-            <span class="status-date">Дата создания: 25.05.2021</span>
+            <h2 class="status-name">{{ $store.state.selectAd.name }}</h2>
+            <span class="status-number">{{ $store.state.selectAd.id }}</span>
+            <span class="status-date">{{ $store.state.selectAd.data }}</span>
             <span class="status-comment">Ваш комментарий:</span>
             <textarea
               disabled
@@ -65,9 +65,8 @@
               name="comment"
               cols="30"
               rows="10"
-            >
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis blanditiis eos impedit dignissimos reiciendis sapiente harum dolorum, fugit, recusandae earum autem eaque laboriosam fugiat adipisci nostrum pariatur et dicta ab?</textarea
-            >
+              v-model="$store.state.selectAd.comment"
+            ></textarea>
           </div>
         </div>
       </div>
@@ -93,7 +92,7 @@ export default {
 
 <style lang="scss" scoped>
 .status-wrapper {
-  min-height: calc(100vh - 80px - 80px);
+  min-height: calc(100vh - 220px);
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
@@ -199,6 +198,6 @@ export default {
   border: none;
   resize: none;
   margin: 0;
-  padding: 0 15px;
+  padding: 15px;
 }
 </style>

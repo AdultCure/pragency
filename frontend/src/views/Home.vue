@@ -169,7 +169,7 @@ export default {
   margin: 0 auto;
 }
 .home-wrapper {
-  min-height: calc(100vh - 80px - 80px);
+  min-height: calc(100vh - 220px);
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;

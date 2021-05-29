@@ -42,10 +42,14 @@
           </div>
           <div class="orders-history">
             <h3 class="history-title">История заказов:</h3>
-            <div class="history-card">
+            <div
+              class="history-card"
+              v-for="userAd of fullUserAdList"
+              :key="userAd.id"
+            >
               <div class="history-card-content">
-                <p class="history-card-name">{{ $store.state.adList[0] }}</p>
-                <p class="history-card-number">Номер заказа: #1234567890</p>
+                <p class="history-card-name">{{ userAd.name }}</p>
+                <p class="history-card-number">Номер заказа: {{ userAd.id }}</p>
               </div>
               <img
                 src="../assets/pictures/status-icon-1.svg"
@@ -65,6 +69,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import MainFooter from "../components/MainFooter.vue";
 import MainHeader from "../components/MainHeader.vue";
 
@@ -79,13 +84,14 @@ export default {
       showPassword: false,
     };
   },
+  computed: mapGetters(["fullUserAdList"]),
   methods: {},
 };
 </script>
 
 <style lang="scss" scoped>
 .profile-wrapper {
-  min-height: calc(100vh - 80px - 80px);
+  min-height: calc(100vh - 160px);
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
