@@ -7,7 +7,7 @@ export default createStore({
     isAdmin: false,
     currentUser: {
       name: localStorage.name,
-      password: localStorage.password,
+      token: localStorage.token,
       email: localStorage.email,
     },
     adList: [

@@ -1,17 +1,18 @@
 <template>
   <div class="orders">
-    <main-header />
+    <main-header/>
     <div class="orders-wrapper">
-      <div class="orders-content" v-if="fullUserAdList.length">
+      <div class="orders-content" v-if="responseData.length">
         <div
-          class="orders-card"
-          v-for="userAd of fullUserAdList"
-          :key="userAd.id"
+            class="orders-card"
+            v-for="userAd of fullUserAdList"
+            :key="userAd.id"
         >
           <router-link :to="{ name: 'Status' }" class="router"
-            ><ul
-              class="orders-card-content active-card"
-              @click="
+          >
+            <ul
+                class="orders-card-content active-card"
+                @click="
                 $store.state.selectAd.name = userAd.name;
                 $store.state.selectAd.data = userAd.data;
                 $store.state.selectAd.id = userAd.id;
@@ -21,7 +22,8 @@
               <li class="orders-name">{{ userAd.name }}</li>
               <li class="orders-date">{{ userAd.data }}</li>
               <li class="orders-number">{{ userAd.id }}</li>
-            </ul></router-link
+            </ul>
+          </router-link
           >
         </div>
       </div>
@@ -29,19 +31,22 @@
         <h3 class="orders-no-cards-header">
           Тут пока ничего нет. Вы можете заказать услугу
           <router-link :to="{ name: 'Services' }" class="orders-no-cards-link"
-            >здесь</router-link
+          >здесь
+          </router-link
           >
         </h3>
       </div>
     </div>
-    <main-footer />
+    <main-footer/>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
 import MainFooter from "../components/MainFooter.vue";
 import MainHeader from "../components/MainHeader.vue";
+import axios from "axios";
+
 export default {
   components: {
     MainFooter,
@@ -49,9 +54,24 @@ export default {
   },
   name: "Orders",
   data() {
-    return {};
+    return {
+      responseData: []
+    };
   },
   computed: mapGetters(["fullUserAdList"]),
+  mounted() {
+    axios.get("http://localhost:8000/api/order",
+        {headers: {Authorization: `Bearer ${this.$store.state.currentUser.token}`}}
+    )
+        .then((response) => {
+          response.data = this.responseData
+          console.log(response.data)
+        })
+        .catch((error) => {
+          this.loginError = "Упс! Что-то пошло не так :(";
+          console.log(error);
+        })
+  }
 };
 </script>
 
@@ -62,16 +82,20 @@ export default {
   width: 100%;
   margin: 0 auto;
 }
+
 .router {
   color: #4d5155;
 }
+
 .active-card:hover {
   color: #59abff;
 }
+
 .orders-content {
   max-width: 1210px;
   padding: 0 115px;
 }
+
 .orders-card {
   height: 80px;
   background: #ffffff;
@@ -81,6 +105,7 @@ export default {
   border-radius: 13px;
   margin: 60px 0;
 }
+
 .orders-card-content {
   display: flex;
   height: 80px;
@@ -88,6 +113,7 @@ export default {
   padding-left: 25px;
   flex-direction: row;
 }
+
 .orders-name {
   display: block;
   font-weight: normal;
@@ -96,11 +122,13 @@ export default {
   max-width: 300px;
   width: 100%;
 }
+
 .orders-date {
   font-weight: normal;
   font-size: 14px;
   line-height: 17px;
 }
+
 .orders-number {
   font-weight: normal;
   font-size: 14px;
@@ -108,6 +136,7 @@ export default {
   margin-left: auto;
   padding-right: 80px;
 }
+
 .orders-no-cards {
   background: #ffffff;
   border: 1px solid #d0d0d0;
@@ -120,11 +149,13 @@ export default {
   display: flex;
   align-items: center;
 }
+
 .orders-no-cards-header {
   font-weight: normal;
   font-size: 18px;
   line-height: 29px;
 }
+
 .orders-no-cards-link {
   color: #59abff;
 }

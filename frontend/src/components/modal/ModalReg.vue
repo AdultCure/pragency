@@ -129,9 +129,6 @@ export default {
           password: this.state.password.password.toString(),
         })
         .then((response) => {
-          this.$store.state.currentUser.name = this.state.name;
-          this.$store.state.currentUser.email = this.state.email;
-          this.$store.state.currentUser.password = this.state.password;
           this.$emit("closeRegModal");
           this.$emit("openAuth");
           console.log(response);
