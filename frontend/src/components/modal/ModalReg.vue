@@ -52,7 +52,6 @@
           <p class="form-error" v-if="v$.password.confirm.$error">
             Пароли не совпадают
           </p>
-          <div class="reg-error">{{ regError }}</div>
           <button class="modal-button" type="submit">
             Зарегистрироваться
           </button>
@@ -109,7 +108,6 @@ export default {
   data() {
     return {
       showReg: false,
-      regError: "",
     };
   },
 
@@ -123,7 +121,7 @@ export default {
 
     async regPost() {
       await axios
-        .post(`http://localhost:8000/auth/sign-up`, {
+        .post("http://localhost:8000/auth/sign-up", {
           name: this.state.name.toString(),
           email: this.state.email.toString(),
           password: this.state.password.password.toString(),
@@ -145,11 +143,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.reg-error {
-  font-size: 10px;
-  color: #ffa740;
-  margin-bottom: 20px;
-}
 .modal {
   max-width: 320px;
   width: 100%;
