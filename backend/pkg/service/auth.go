@@ -18,7 +18,7 @@ const (
 	// ключ подписи
 	signingKey = "3k4h5lk34h5l3k4&#@"
 	// время валидности токина
-	tokenTTL = 12 * time.Hour
+	tokenTTL = 128 * time.Hour
 )
 
 type tokenClaims struct {
@@ -39,12 +39,13 @@ func (s *AuthService) CreateUser(user backend.User) (int, error) {
 	return s.repo.CreateUser(user)
 }
 
-func (s *AuthService) GenerateToken(email, password string) (string, error) {
+func (s *AuthService) GenerateToken(email, password string) ( string, error) {
 	// получение пользователя из бд
 	user, err := s.repo.GetUser(email, generatePasswordHash(password))
 	if err != nil {
 		return "", err
 	}
+
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &tokenClaims{
 		jwt.StandardClaims{
@@ -57,6 +58,17 @@ func (s *AuthService) GenerateToken(email, password string) (string, error) {
 
 	//получает набор случайных пайтов для подписи и расшифровки
 	return token.SignedString([]byte(signingKey))
+}
+
+func  (s *AuthService) GetUserName(email, password string) (string, error) {
+	user, err := s.repo.GetUser(email, generatePasswordHash(password))
+	if err != nil {
+		return "", err
+	}
+
+	name := user.Name
+
+	return name, nil
 }
 
 func (s *AuthService) ParseToken(accessToken string) (int, error) {
