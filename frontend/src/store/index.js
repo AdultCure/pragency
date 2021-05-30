@@ -5,6 +5,11 @@ export default createStore({
   state: {
     isAuth: false,
     isAdmin: false,
+    currentUser: {
+      name: localStorage.name,
+      password: localStorage.password,
+      email: localStorage.email,
+    },
     adList: [
       {
         name: "Реклама в интернете",

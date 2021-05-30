@@ -1,10 +1,10 @@
 <template>
   <transition name="fade">
     <div
-        class="modal-shadow"
-        @mousedown.self="closeModal"
-        @keydown.esc="closeModal"
-        v-show="showShadow"
+      class="modal-shadow"
+      @mousedown.self="closeModal"
+      @keydown.esc="closeModal"
+      v-show="showShadow"
     >
       <div class="modal" v-show="showAuth">
         <div class="modal-close" @click="closeModal">&#10006;</div>
@@ -12,26 +12,27 @@
           <h3 class="modal-header">Авторизация</h3>
           <form action="" @submit.prevent="formSubmit">
             <input
-                type="text"
-                name="login"
-                class="modal-input"
-                placeholder="E-mail"
-                v-model="email"
-                ref="loginInput"
+              type="text"
+              name="login"
+              class="modal-input"
+              placeholder="E-mail"
+              v-model="email"
+              ref="loginInput"
             />
             <input
-                type="password"
-                class="modal-input"
-                placeholder="Пароль"
-                v-model="password"
+              type="password"
+              class="modal-input"
+              placeholder="Пароль"
+              v-model="password"
             />
+            <div class="login-error">{{ loginError }}</div>
             <p class="modal-description">
               Для авторизации в платформе требуется ввести логин и пароль,
               созданные при регистрации
             </p>
             <p class="modal-ask">Вы еще не зарегистрированы в платформе ?</p>
             <span class="modal-registration" @click="openModalReg"
-            >Зарегистрироваться</span
+              >Зарегистрироваться</span
             >
             <button class="modal-button" type="submit">
               Войти
@@ -39,7 +40,14 @@
           </form>
         </div>
       </div>
-      <modal-reg ref="modalReg" @closeRegModal="closeModal"/>
+      <modal-reg
+        ref="modalReg"
+        @closeRegModal="closeModal"
+        @openAuth="
+          showAuth = true;
+          showShadow = true;
+        "
+      />
     </div>
   </transition>
 </template>
@@ -59,7 +67,7 @@ export default {
       password: "",
       showAuth: false,
       showShadow: false,
-      errors: [],
+      loginError: "",
     };
   },
   methods: {
@@ -80,27 +88,40 @@ export default {
     formSubmit() {
       this.signIn();
     },
-    signIn() {
-      axios.post(`http://localhost:8000/auth/sign-in`,
-          {
-            "email": this.email.toString(),
-            "password": this.password.toString()
-          })
-          .then(response => {
-            console.log("Спасибо !", response.data.token)
+    async signIn() {
+      await axios
+        .post("http://localhost:8000/auth/sign-in", {
+          email: this.email.toString(),
+          password: this.password.toString(),
+        })
+        .then((response) => {
+          console.log("Спасибо !", response.data.token);
 
-            this.$store.state.isAuth = true;
-            this.closeModal();
-          })
-          .catch(error => {
-            console.log("Ошибка axios запроса", error.data)
-          })
+          console.log(this.email.toString(), this.password.toString());
+          this.$store.state.currentUser.name = this.name;
+          this.$store.state.currentUser.email = this.email;
+          this.$store.state.currentUser.password = this.password;
+          localStorage.setItem("name", this.name);
+          localStorage.setItem("email", this.email);
+          localStorage.setItem("password", this.password);
+          setTimeout(location.reload(), 100);
+          this.closeModal();
+        })
+        .catch((error) => {
+          this.loginError = "Неверный логин или пароль";
+          console.log(error);
+        });
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.login-error {
+  font-size: 10px;
+  color: #ffa740;
+}
+
 .modal-shadow {
   position: fixed;
   top: 0;
@@ -194,12 +215,10 @@ export default {
   color: #ffffff;
   font-size: 12px;
 
-&
-:hover {
-  background: #fff;
-  color: #59abff;
-}
-
+  &:hover {
+    background: #fff;
+    color: #59abff;
+  }
 }
 .fade-enter-active,
 .fade-leave-active {
