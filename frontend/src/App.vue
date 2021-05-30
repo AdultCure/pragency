@@ -13,7 +13,6 @@ export default {
     } else {
       this.$store.state.isAuth = false;
     }
-    console.log(this.$store.state.currentUser.name);
   },
 };
 </script>

@@ -95,13 +95,7 @@ export default {
           password: this.password.toString(),
         })
         .then((response) => {
-          console.log("Спасибо !", response.data.token);
-
-          console.log(this.email.toString(), this.password.toString());
-          this.$store.state.currentUser.name = this.name;
-          this.$store.state.currentUser.email = this.email;
-          this.$store.state.currentUser.password = this.password;
-          localStorage.setItem("name", this.name);
+          localStorage.setItem("name", response.data.name);
           localStorage.setItem("email", this.email);
           localStorage.setItem("password", this.password);
           setTimeout(location.reload(), 100);
