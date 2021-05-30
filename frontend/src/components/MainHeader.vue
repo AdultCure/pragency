@@ -39,7 +39,7 @@
           active-class="menu-item-active"
           class="header-user-name"
           v-show="$store.state.isAuth"
-          >Имя пользователя</router-link
+          >{{ $store.state.currentUser.name }}</router-link
         >
         <button
           class="header-button"
@@ -85,13 +85,17 @@ export default {
       setTimeout(this.focusInput, 100);
     },
     logOut() {
-      this.$store.state.isAuth = false;
+      localStorage.clear();
+      setTimeout(location.reload(), 100);
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.login-system {
+  position: fixed;
+}
 .main-header {
   position: sticky;
   top: 0;

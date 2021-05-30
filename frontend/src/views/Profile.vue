@@ -12,8 +12,12 @@
                 class="profile-avatar"
               />
               <div class="profile-title">
-                <h2 class="profile-name">Имя пользователя</h2>
-                <h3 class="profile-email">billyherrington@dungeon.cum</h3>
+                <h2 class="profile-name">
+                  {{ $store.state.currentUser.name }}
+                </h2>
+                <h3 class="profile-email">
+                  {{ $store.state.currentUser.email }}
+                </h3>
               </div>
             </div>
             <button
