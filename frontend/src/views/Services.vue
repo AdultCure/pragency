@@ -7,9 +7,9 @@
         <div class="services-card" v-for="ad of fullAdList" :key="ad.name">
           <div class="services-card-title">
             <img
-                v-bind:src="getImgUrl(ad.img)"
-                alt="picture"
-                class="services-card-img"
+              v-bind:src="getImgUrl(ad.img)"
+              alt="picture"
+              class="services-card-img"
             />
             <h2 class="services-card-header">{{ ad.name }}</h2>
           </div>
@@ -17,8 +17,8 @@
             {{ ad.description }}
           </p>
           <button
-              class="services-card-button"
-              @click="
+            class="services-card-button"
+            @click="
               selectAd.name = ad.name;
               selectAd.description = ad.description;
               openModal();
@@ -52,12 +52,12 @@ export default {
   },
   data() {
     return {
-        selectAd: {
-      name: "",
-      description: "",
-      comment: "",
-    },
-  };
+      selectAd: {
+        name: "",
+        description: "",
+        comment: "",
+      },
+    };
   },
   computed: mapGetters(["fullAdList", "fullUserAdList"]),
   methods: {
@@ -163,9 +163,9 @@ export default {
   margin: 0 65px 25px 0;
   cursor: pointer;
 
-&:hover {
-   background: #fff;
-   color: #59abff;
- }
+  &:hover {
+    background: #fff;
+    color: #59abff;
+  }
 }
 </style>
