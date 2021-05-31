@@ -46,36 +46,41 @@
           </div>
           <div class="orders-history">
             <h3 class="history-title">История заказов:</h3>
+            <div
+              class="orders-card-content"
+              v-if="$store.state.userAdList !== null"
+            >
+              <div
+                class="history-card"
+                v-for="userAd of $store.state.userAdList.slice(0, 3)"
+                :key="userAd.id"
+              >
+                <router-link :to="{ name: 'Status' }" class="router"
+                  ><div
+                    class="history-card-content"
+                    @click="
+                      $store.state.selectAd.name = userAd.category;
+                      $store.state.selectAd.data = userAd.date;
+                      $store.state.selectAd.id = userAd.id;
+                      $store.state.selectAd.comment = userAd.comment;
+                    "
+                  >
+                    <p class="history-card-name">{{ userAd.category }}</p>
+                    <p class="history-card-number">
+                      Номер заказа: №{{ userAd.id }}
+                    </p>
+                  </div></router-link
+                >
+                <img
+                  src="../assets/pictures/status-icon-1.svg"
+                  alt="status"
+                  class="history-card-status"
+                />
+              </div>
+            </div>
             <router-link :to="{ name: 'Orders' }" class="history-look-orders"
               ><p>Посмотреть все заказы</p></router-link
             >
-            <div
-              class="history-card"
-              v-for="userAd of $store.state.userAdList"
-              :key="userAd.id"
-            >
-              <router-link :to="{ name: 'Status' }" class="router"
-                ><div
-                  class="history-card-content"
-                  @click="
-                    $store.state.selectAd.name = userAd.category;
-                    $store.state.selectAd.data = userAd.date;
-                    $store.state.selectAd.id = userAd.id;
-                    $store.state.selectAd.comment = userAd.comment;
-                  "
-                >
-                  <p class="history-card-name">{{ userAd.category }}</p>
-                  <p class="history-card-number">
-                    Номер заказа: №{{ userAd.id }}
-                  </p>
-                </div></router-link
-              >
-              <img
-                src="../assets/pictures/status-icon-1.svg"
-                alt="status"
-                class="history-card-status"
-              />
-            </div>
           </div>
         </div>
       </div>
@@ -86,7 +91,6 @@
 
 <script>
 import axios from "axios";
-import { mapGetters } from "vuex";
 import MainFooter from "../components/MainFooter.vue";
 import MainHeader from "../components/MainHeader.vue";
 
@@ -101,7 +105,6 @@ export default {
       showPassword: false,
     };
   },
-  computed: mapGetters(["fullUserAdList"]),
   methods: {},
   mounted() {
     axios
@@ -111,7 +114,10 @@ export default {
         },
       })
       .then((response) => {
-        this.$store.state.userAdList = response.data.data.reverse();
+        this.$store.state.userAdList = response.data.data;
+        if (this.$store.state.userAdList !== null) {
+          this.$store.state.userAdList.reverse();
+        }
       })
       .catch((error) => {
         this.loginError = "Упс! Что-то пошло не так :(";
@@ -237,8 +243,6 @@ export default {
   margin-top: 70px;
   max-width: 353px;
   width: 100%;
-  max-height: 260px;
-  overflow: hidden;
 }
 .history-title {
   font-weight: normal;

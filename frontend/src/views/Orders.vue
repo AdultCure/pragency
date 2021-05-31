@@ -63,7 +63,9 @@ export default {
       })
       .then((response) => {
         this.$store.state.userAdList = response.data.data;
-        this.$store.state.userAdList.reverse();
+        if (this.$store.state.userAdList !== null) {
+          this.$store.state.userAdList.reverse();
+        }
       })
       .catch((error) => {
         this.loginError = "Упс! Что-то пошло не так :(";

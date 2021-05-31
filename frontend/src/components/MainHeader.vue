@@ -48,13 +48,15 @@
         >
           Войти
         </button>
-        <button
-          class="header-button"
-          @click="logOut()"
-          v-show="$store.state.isAuth"
-        >
-          Выйти
-        </button>
+        <a href="/"
+          ><button
+            class="header-button"
+            @click="logOut()"
+            v-show="$store.state.isAuth"
+          >
+            Выйти
+          </button>
+        </a>
       </div>
     </div>
     <modal-auth ref="modalAuth" />
