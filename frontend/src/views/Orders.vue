@@ -1,48 +1,45 @@
 <template>
   <div class="orders">
-    <main-header/>
+    <main-header />
     <div class="orders-wrapper">
-      <div class="orders-content" v-if="responseData.length">
+      <div class="orders-content" v-if="$store.state.userAdList !== null">
         <div
-            class="orders-card"
-            v-for="userAd of fullUserAdList"
-            :key="userAd.id"
+          class="orders-card"
+          v-for="userAd of $store.state.userAdList"
+          :key="userAd.id"
         >
-          <router-link :to="{ name: 'Status' }" class="router"
-          >
+          <router-link :to="{ name: 'Status' }" class="router">
             <ul
-                class="orders-card-content active-card"
-                @click="
-                $store.state.selectAd.name = userAd.name;
-                $store.state.selectAd.data = userAd.data;
+              class="orders-card-content active-card"
+              @click="
+                $store.state.selectAd.name = userAd.category;
+                $store.state.selectAd.data = userAd.date;
                 $store.state.selectAd.id = userAd.id;
                 $store.state.selectAd.comment = userAd.comment;
               "
             >
-              <li class="orders-name">{{ userAd.name }}</li>
-              <li class="orders-date">{{ userAd.data }}</li>
-              <li class="orders-number">{{ userAd.id }}</li>
+              <li class="orders-name">{{ userAd.category }}</li>
+              <li class="orders-date">{{ userAd.date }}</li>
+              <li class="orders-number">Заказ №{{ userAd.id }}</li>
             </ul>
-          </router-link
-          >
+          </router-link>
         </div>
       </div>
       <div class="orders-no-cards" v-else>
         <h3 class="orders-no-cards-header">
           Тут пока ничего нет. Вы можете заказать услугу
           <router-link :to="{ name: 'Services' }" class="orders-no-cards-link"
-          >здесь
-          </router-link
-          >
+            >здесь
+          </router-link>
         </h3>
       </div>
     </div>
-    <main-footer/>
+    <main-footer />
   </div>
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 import MainFooter from "../components/MainFooter.vue";
 import MainHeader from "../components/MainHeader.vue";
 import axios from "axios";
@@ -54,24 +51,25 @@ export default {
   },
   name: "Orders",
   data() {
-    return {
-      responseData: []
-    };
+    return {};
   },
   computed: mapGetters(["fullUserAdList"]),
   mounted() {
-    axios.get("http://localhost:8000/api/order",
-        {headers: {Authorization: `Bearer ${this.$store.state.currentUser.token}`}}
-    )
-        .then((response) => {
-          response.data = this.responseData
-          console.log(response.data)
-        })
-        .catch((error) => {
-          this.loginError = "Упс! Что-то пошло не так :(";
-          console.log(error);
-        })
-  }
+    axios
+      .get("http://localhost:8000/api/order", {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.currentUser.token}`,
+        },
+      })
+      .then((response) => {
+        this.$store.state.userAdList = response.data.data;
+        this.$store.state.userAdList.reverse();
+      })
+      .catch((error) => {
+        this.loginError = "Упс! Что-то пошло не так :(";
+        console.log(error);
+      });
+  },
 };
 </script>
 

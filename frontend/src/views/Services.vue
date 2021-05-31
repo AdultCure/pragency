@@ -1,6 +1,6 @@
 <template>
   <div class="services">
-    <main-header/>
+    <main-header />
     <div class="services-wrapper">
       <h2 class="services-header">Услуги</h2>
       <div class="services-content">
@@ -29,14 +29,14 @@
         </div>
       </div>
     </div>
-    <main-footer/>
-    <services-auth ref="servauth"/>
-    <services-order ref="servorder" @submitHandler="submit()"/>
+    <main-footer />
+    <services-auth ref="servauth" />
+    <services-order ref="servorder" @submitHandler="submit()" />
   </div>
 </template>
 
 <script>
-import {mapGetters, mapMutations} from "vuex";
+import { mapGetters } from "vuex";
 import MainFooter from "../components/MainFooter.vue";
 import MainHeader from "../components/MainHeader.vue";
 import ServicesAuth from "../components/modal/ServicesAuth.vue";
@@ -60,31 +60,38 @@ export default {
       },
     };
   },
-  computed: mapGetters(["fullAdList", "fullUserAdList"]),
+  computed: mapGetters(["fullAdList"]),
   methods: {
-    ...mapMutations(["createAd"]),
     async submit() {
       let Data = new Date();
       let Year = Data.getFullYear();
       let Month = Data.getMonth();
       let Day = Data.getDate();
 
-      await axios.post("http://localhost:8000/api/order", {
+      await axios
+        .post(
+          "http://localhost:8000/api/order",
+          {
             category: this.selectAd.name.toString(),
             status: "Ваш заказ создан",
-            date: `${Day}.${(Month + 1)}.${Year}`,
-            comment: this.$refs.servorder.comment.toString()
+            date: `${Day}.${Month + 1}.${Year}`,
+            comment: this.$refs.servorder.comment.toString(),
           },
-          {headers: {Authorization: `Bearer ${this.$store.state.currentUser.token}`}}
-      )
-          .then((response) => {
-            this.$router.push("orders");
-            console.log(response)
-          })
-          .catch((error) => {
-            this.loginError = "Упс! Что-то пошло не так :(";
-            console.log(error);
-          })
+          {
+            headers: {
+              Authorization: `Bearer ${this.$store.state.currentUser.token}`,
+            },
+          }
+        )
+        .then((response) => {
+          this.$router.push("orders");
+          location.reload();
+          console.log(response);
+        })
+        .catch((error) => {
+          this.loginError = "Упс! Что-то пошло не так :(";
+          console.log(error);
+        });
     },
     openModal() {
       if (this.$store.state.isAuth === false) {

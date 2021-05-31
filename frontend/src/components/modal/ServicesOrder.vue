@@ -21,12 +21,16 @@
               name="comment"
               maxlength="2000"
               v-model="comment"
+              required
             />
+            <span v-if="showAlert" class="comment-alert"
+              >Пожалуйста, оставьте комментарий к заказу</span
+            >
             <div class="modal-buttons">
               <button class="modal-order" @click.prevent="create">
                 Заказать
               </button>
-              <button class="modal-cancel" @click="closeModal" @click.prevent>
+              <button class="modal-cancel" @click.prevent="closeModal">
                 Отмена
               </button>
             </div>
@@ -44,6 +48,7 @@ export default {
     return {
       showShadow: false,
       showModalOrder: false,
+      showAlert: false,
       comment: "",
     };
   },
@@ -53,15 +58,23 @@ export default {
       this.showShadow = false;
     },
     create() {
-      this.$emit("submitHandler");
-      this.closeModal();
-      this.$router.push("orders");
+      if (this.comment.length) {
+        this.$emit("submitHandler");
+        this.closeModal();
+        this.$router.push("orders");
+      } else {
+        this.showAlert = true;
+      }
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.comment-alert {
+  font-size: 15px;
+  color: #ffa740;
+}
 .modal-shadow {
   position: fixed;
   top: 0;

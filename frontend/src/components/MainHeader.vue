@@ -50,10 +50,7 @@
         </button>
         <button
           class="header-button"
-          @click="
-            logOut();
-            $router.push('/');
-          "
+          @click="logOut()"
           v-show="$store.state.isAuth"
         >
           Выйти
@@ -86,7 +83,7 @@ export default {
     },
     logOut() {
       localStorage.clear();
-      setTimeout(location.reload(), 100);
+      location.reload();
     },
   },
 };
@@ -150,6 +147,9 @@ export default {
   line-height: 17px;
   color: #4d5155;
   cursor: pointer;
+  &:hover {
+    border-bottom: 2px solid #59abff;
+  }
 }
 .header-button {
   outline: none;

@@ -13,7 +13,7 @@
                 alt="status-icon"
                 class="status-img"
               />
-              <div class="status-check"></div>
+              <div class="status-check status-check-active"></div>
               <p class="status-text">Ваш заказ создан</p>
             </div>
             <div class="status-item">
@@ -49,15 +49,19 @@
                 alt="status-icon"
                 class="status-img"
               />
-              <div class="status-check status-check-active"></div>
+              <div class="status-check"></div>
               <p class="status-text">Сделка завершена</p>
             </div>
           </div>
           <div class="status-line"></div>
           <div class="status-info">
             <h2 class="status-name">{{ $store.state.selectAd.name }}</h2>
-            <span class="status-number">{{ $store.state.selectAd.id }}</span>
-            <span class="status-date">{{ $store.state.selectAd.data }}</span>
+            <span class="status-number"
+              >Заказ №{{ $store.state.selectAd.id }}</span
+            >
+            <span class="status-date"
+              >Дата создания: {{ $store.state.selectAd.data }}</span
+            >
             <span class="status-comment">Ваш комментарий:</span>
             <textarea
               disabled

@@ -50,17 +50,9 @@ export default createStore({
       comment: "",
     },
   },
-  mutations: {
-    createAd(state, newAd) {
-      state.userAdList.unshift(newAd);
-    },
-  },
   getters: {
     fullAdList(state) {
       return state.adList;
-    },
-    fullUserAdList(state) {
-      return state.userAdList;
     },
   },
   actions: {},

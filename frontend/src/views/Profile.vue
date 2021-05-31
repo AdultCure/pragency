@@ -46,24 +46,36 @@
           </div>
           <div class="orders-history">
             <h3 class="history-title">История заказов:</h3>
+            <router-link :to="{ name: 'Orders' }" class="history-look-orders"
+              ><p>Посмотреть все заказы</p></router-link
+            >
             <div
               class="history-card"
-              v-for="userAd of fullUserAdList"
+              v-for="userAd of $store.state.userAdList"
               :key="userAd.id"
             >
-              <div class="history-card-content">
-                <p class="history-card-name">{{ userAd.name }}</p>
-                <p class="history-card-number">Номер заказа: {{ userAd.id }}</p>
-              </div>
+              <router-link :to="{ name: 'Status' }" class="router"
+                ><div
+                  class="history-card-content"
+                  @click="
+                    $store.state.selectAd.name = userAd.category;
+                    $store.state.selectAd.data = userAd.date;
+                    $store.state.selectAd.id = userAd.id;
+                    $store.state.selectAd.comment = userAd.comment;
+                  "
+                >
+                  <p class="history-card-name">{{ userAd.category }}</p>
+                  <p class="history-card-number">
+                    Номер заказа: №{{ userAd.id }}
+                  </p>
+                </div></router-link
+              >
               <img
                 src="../assets/pictures/status-icon-1.svg"
                 alt="status"
                 class="history-card-status"
               />
             </div>
-            <router-link :to="{ name: 'Orders' }" class="history-look-orders"
-              ><p>Посмотреть все заказы</p></router-link
-            >
           </div>
         </div>
       </div>
@@ -73,6 +85,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import { mapGetters } from "vuex";
 import MainFooter from "../components/MainFooter.vue";
 import MainHeader from "../components/MainHeader.vue";
@@ -90,10 +103,28 @@ export default {
   },
   computed: mapGetters(["fullUserAdList"]),
   methods: {},
+  mounted() {
+    axios
+      .get("http://localhost:8000/api/order", {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.currentUser.token}`,
+        },
+      })
+      .then((response) => {
+        this.$store.state.userAdList = response.data.data.reverse();
+      })
+      .catch((error) => {
+        this.loginError = "Упс! Что-то пошло не так :(";
+        console.log(error);
+      });
+  },
 };
 </script>
 
 <style lang="scss" scoped>
+.router {
+  color: #4d5155;
+}
 .profile-wrapper {
   min-height: calc(100vh - 160px);
   max-width: 1440px;
@@ -206,13 +237,15 @@ export default {
   margin-top: 70px;
   max-width: 353px;
   width: 100%;
+  max-height: 260px;
+  overflow: hidden;
 }
 .history-title {
   font-weight: normal;
   font-size: 14px;
   line-height: 17px;
   color: #4d5155;
-  margin-bottom: 33px;
+  margin-bottom: 15px;
 }
 .history-card {
   border: 1px solid #59abff;
