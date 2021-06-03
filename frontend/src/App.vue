@@ -1,17 +1,13 @@
 <template>
   <div id="app" class="app">
-    <!-- <notification v-show="$store.state.showNotify" /> -->
     <router-view />
   </div>
 </template>
 
 <script>
-// import Notification from "./components/notifications/Notification";
 export default {
   name: "App",
-  components: {
-    // Notification,
-  },
+  components: {},
   methods: {},
   mounted() {
     if (localStorage.token) {
