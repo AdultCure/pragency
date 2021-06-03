@@ -38,41 +38,44 @@
           :to="{ name: 'Profile' }"
           active-class="menu-item-active"
           class="header-user-name"
-          v-show="$store.state.isAuth"
+          v-if="$store.state.isAuth === true"
           >{{ $store.state.currentUser.name }}</router-link
         >
         <button
           class="header-button"
-          @click="openModalAuth()"
-          v-show="$store.state.isAuth === false"
+          @click.prevent="openModalAuth()"
+          v-if="$store.state.isAuth === false"
         >
           Войти
         </button>
-        <a href="/"
-          ><button
-            class="header-button"
-            @click="logOut()"
-            v-show="$store.state.isAuth"
-          >
-            Выйти
-          </button>
-        </a>
+        <button
+          class="header-button"
+          @click.prevent="logOut"
+          v-if="$store.state.isAuth === true"
+        >
+          Выйти
+        </button>
       </div>
     </div>
     <modal-auth ref="modalAuth" />
+    <notification ref="notify" v-show="$store.state.showNotify" />
   </div>
 </template>
 
 <script>
 import ModalAuth from "./modal/ModalAuth.vue";
+import Notification from "./notifications/Notification";
 
 export default {
   name: "MainHeader",
   components: {
     ModalAuth,
+    Notification,
   },
   data() {
-    return {};
+    return {
+      showAlert: false,
+    };
   },
   methods: {
     focusInput() {
@@ -85,7 +88,13 @@ export default {
     },
     logOut() {
       localStorage.clear();
-      location.reload();
+      this.$store.state.isAuth = false;
+      setTimeout(() => {
+        this.$store.state.notymessage = "Вы вышли из системы";
+        this.$store.state.showNotify = true;
+        setTimeout(() => (this.$store.state.showNotify = false), 2000);
+      });
+      this.$router.push("/");
     },
   },
 };

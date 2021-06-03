@@ -84,8 +84,12 @@ export default {
           }
         )
         .then((response) => {
+          setTimeout(() => {
+            this.$store.state.notymessage = "Заказ принят в обработку";
+            this.$store.state.showNotify = true;
+            setTimeout(() => (this.$store.state.showNotify = false), 2000);
+          });
           this.$router.push("orders");
-          location.reload();
           console.log(response);
         })
         .catch((error) => {

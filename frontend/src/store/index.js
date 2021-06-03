@@ -1,10 +1,11 @@
 import { createStore } from "vuex";
-import user from "./user";
 
 export default createStore({
   state: {
     isAuth: false,
     isAdmin: false,
+    showNotify: false,
+    notymessage: "",
     currentUser: {
       name: localStorage.name,
       token: localStorage.token,
@@ -56,5 +57,4 @@ export default createStore({
     },
   },
   actions: {},
-  modules: { user },
 });

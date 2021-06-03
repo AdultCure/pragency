@@ -61,7 +61,6 @@ export default {
       if (this.comment.length) {
         this.$emit("submitHandler");
         this.closeModal();
-        this.$router.push("orders");
       } else {
         this.showAlert = true;
       }

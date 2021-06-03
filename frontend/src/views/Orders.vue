@@ -54,7 +54,7 @@ export default {
     return {};
   },
   computed: mapGetters(["fullUserAdList"]),
-  mounted() {
+  created() {
     axios
       .get("http://localhost:8000/api/order", {
         headers: {
