@@ -50,6 +50,11 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			order.PUT("/:id", h.updateOrder)
 			order.DELETE("/:id", h.deleteOrder)
 		}
+
+		admin := api.Group("/admin")
+		{
+			admin.GET("", h.getAllOrdersAdmin)
+		}
 	}
 
 	return router

@@ -21,6 +21,10 @@ func (s  *OrderService) GetAll(userId  int) ([]backend.Order, error) {
 	return s.repo.GetAll(userId)
 }
 
+func (s *OrderService) GetAllAdmin() ([]backend.Order, error) {
+	return s.repo.GetAllAdmin()
+}
+
 func (s *OrderService) GetById(userId, orderId int) (backend.Order, error) {
 	return s.repo.GetById(userId, orderId)
 }

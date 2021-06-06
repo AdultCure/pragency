@@ -24,3 +24,25 @@
 "email": "artemeremenko.m@yandex.ru",
 "password": "iloveddos"
 }** - пример post запроса авторизации и получения токена
+
+
+// шаблоны
+
+{
+"name": "Denissssdf",
+"email": "pupa@yandex.ruu",
+"password": "qwersdfsdfty"
+}
+
+{
+"name": "Denisssddsffsdfssdf",
+"email": "pupa@yandex.ru",
+"password": "qwers"
+}
+
+{
+"category": "12345678",
+"status": "1234",
+"date": "today",
+"comment": "for u ass",
+}

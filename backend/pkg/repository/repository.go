@@ -13,6 +13,7 @@ type Authorization interface {
 type Order interface {
 	Create(userId int, order backend.Order) (int, error)
 	GetAll(userId int ) ([]backend.Order, error)
+	GetAllAdmin() ([]backend.Order, error)
 	GetById(userId, orderId int) (backend.Order, error)
 	Delete(userId, orderId int) error
 	Update(userId, orderId int, input backend.UpdateOrderInput) error

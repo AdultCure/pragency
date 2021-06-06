@@ -50,6 +50,18 @@ func (h *Handler) getAllOrders(c *gin.Context) {
 	})
 }
 
+func (h *Handler) getAllOrdersAdmin(c *gin.Context) {
+	orders, err := h.services.Order.GetAllAdmin()
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, getAllOrdersResponse{
+		Data: orders,
+	})
+}
+
 func (h *Handler) getOrdersById(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {

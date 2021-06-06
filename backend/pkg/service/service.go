@@ -8,13 +8,15 @@ import (
 type Authorization interface {
 	CreateUser(user backend.User) (int, error)
 	GenerateToken(email, password string) (string, error)
-	GetUserName(email, password string) (string, error)
+	GetUserMainParams(email, password string) (string, int, string, error)
+	GetAdminRole(email, password string) (string, error)
 	ParseToken(token string) (int, error)
 }
 
 type Order interface {
 	Create(UserId int, order backend.Order) (int, error)
 	GetAll(UserId int) ([]backend.Order, error)
+	GetAllAdmin() ([]backend.Order, error)
 	GetById(UserId, orderId int) (backend.Order, error)
 	Delete(userId, orderId int) error
 	Update(userId, orderId int, input backend.UpdateOrderInput) error

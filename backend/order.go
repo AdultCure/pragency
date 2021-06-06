@@ -8,7 +8,8 @@ type Order struct {
 	Status   string `json:"status" db:"status" binding:"required"`
 	Date     string `json:"date" db:"date" binding:"required"`
 	Comment  string `json:"comment" db:"comment" binding:"required"`
-	UserId   string `json:"user_id"`
+	UserId   string `json:"user_id" db:"user_id" binding:"required"`
+	UserName string `json:"user_name" db:"user_name" binding:"required"`
 }
 
 type UpdateOrderInput struct {

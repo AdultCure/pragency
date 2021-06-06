@@ -11,7 +11,6 @@ import (
 )
 
 // соль для хэширования пароля
-
 const (
 	// соль
 	salt = "vlb25hv2lk523j5l23bv5l23"
@@ -39,7 +38,7 @@ func (s *AuthService) CreateUser(user backend.User) (int, error) {
 	return s.repo.CreateUser(user)
 }
 
-func (s *AuthService) GenerateToken(email, password string) ( string, error) {
+func (s *AuthService) GenerateToken(email, password string) (string, error) {
 	// получение пользователя из бд
 	user, err := s.repo.GetUser(email, generatePasswordHash(password))
 	if err != nil {
@@ -60,15 +59,28 @@ func (s *AuthService) GenerateToken(email, password string) ( string, error) {
 	return token.SignedString([]byte(signingKey))
 }
 
-func  (s *AuthService) GetUserName(email, password string) (string, error) {
+func  (s *AuthService) GetUserMainParams(email, password string) (string, int, string, error) {
+	user, err := s.repo.GetUser(email, generatePasswordHash(password))
+	if err != nil {
+		return "", 0, "", nil
+	}
+
+	name := user.Name
+	id := user.Id
+	admin := user.Admin
+
+	return name, id, admin, nil
+}
+
+func (s *AuthService) GetAdminRole(email, password string) (string, error) {
 	user, err := s.repo.GetUser(email, generatePasswordHash(password))
 	if err != nil {
 		return "", err
 	}
 
-	name := user.Name
+	admin := user.Admin
 
-	return name, nil
+	return admin, nil
 }
 
 func (s *AuthService) ParseToken(accessToken string) (int, error) {
