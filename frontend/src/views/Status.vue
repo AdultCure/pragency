@@ -55,7 +55,7 @@
           </div>
           <div class="status-line"></div>
           <div class="status-info">
-            <h2 class="status-name">{{ $store.state.selectAd.name }}</h2>
+            <h2 class="status-name">{{ $store.state.selectAd.category }}</h2>
             <span class="status-number"
               >Заказ №{{ $store.state.selectAd.id }}</span
             >

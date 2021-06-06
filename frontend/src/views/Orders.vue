@@ -12,8 +12,8 @@
             <ul
               class="orders-card-content active-card"
               @click="
-                $store.state.selectAd.name = userAd.category;
-                $store.state.selectAd.data = userAd.date;
+                $store.state.selectAd.category = userAd.category;
+                $store.state.selectAd.date = userAd.date;
                 $store.state.selectAd.id = userAd.id;
                 $store.state.selectAd.comment = userAd.comment;
               "
@@ -39,7 +39,6 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import MainFooter from "../components/MainFooter.vue";
 import MainHeader from "../components/MainHeader.vue";
 import axios from "axios";
@@ -53,7 +52,6 @@ export default {
   data() {
     return {};
   },
-  computed: mapGetters(["fullUserAdList"]),
   created() {
     axios
       .get("http://localhost:8000/api/order", {

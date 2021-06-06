@@ -59,8 +59,8 @@
                   ><div
                     class="history-card-content"
                     @click="
-                      $store.state.selectAd.name = userAd.category;
-                      $store.state.selectAd.data = userAd.date;
+                      $store.state.selectAd.category = userAd.category;
+                      $store.state.selectAd.date = userAd.date;
                       $store.state.selectAd.id = userAd.id;
                       $store.state.selectAd.comment = userAd.comment;
                     "

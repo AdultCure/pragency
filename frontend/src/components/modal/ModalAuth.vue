@@ -95,12 +95,14 @@ export default {
           password: this.password.toString(),
         })
         .then((response) => {
+          localStorage.setItem("id", response.data.id);
           localStorage.setItem("name", response.data.name);
           localStorage.setItem("email", this.email);
           localStorage.setItem("token", response.data.token);
           this.$store.state.currentUser.name = localStorage.name;
           this.$store.state.currentUser.token = localStorage.token;
           this.$store.state.currentUser.email = localStorage.email;
+          this.$store.state.currentUser.id = localStorage.id;
           this.$store.state.isAuth = true;
           setTimeout(() => {
             this.$store.state.notymessage = "Вы успешно авторизировались!";

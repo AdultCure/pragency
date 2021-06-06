@@ -37,6 +37,11 @@ const routes = [
     name: "AdminPanel",
     component: () => import("../views/AdminPanel/AdminPanel.vue"),
   },
+  {
+    path: "/admin/admin-order",
+    name: "AdminOrder",
+    component: () => import("../views/AdminPanel/AdminOrder.vue"),
+  },
 ];
 
 const router = createRouter({

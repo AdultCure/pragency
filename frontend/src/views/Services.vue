@@ -76,6 +76,8 @@ export default {
             status: "Ваш заказ создан",
             date: `${Day}.${Month + 1}.${Year}`,
             comment: this.$refs.servorder.comment.toString(),
+            user_id: this.$store.state.currentUser.id,
+            user_name: this.$store.state.currentUser.name,
           },
           {
             headers: {

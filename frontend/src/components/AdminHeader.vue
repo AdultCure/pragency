@@ -3,21 +3,18 @@
     <div class="header-wrapper">
       <div class="header-title-wrapper">
         <router-link :to="{ name: 'AdminPanel' }"
-          ><img src="..\assets\pictures\logo.svg" alt="logo" class="header-logo"
-        /></router-link>
-        <router-link :to="{ name: 'AdminPanel' }"
-          ><h1 class="header-title">KS Creative</h1>
+          ><img
+            src="..\assets\pictures\logo.svg"
+            alt="logo"
+            class="header-logo"
+          />
+
+          <h1 class="header-title">KS Creative</h1>
         </router-link>
       </div>
       <div class="header-auth">
         <span class="header-user-name">ADMIN</span>
-        <button
-          class="header-button"
-          @click="
-            logOut();
-            $router.push('/');
-          "
-        >
+        <button class="header-button" @click="logOut()">
           Выйти
         </button>
       </div>
@@ -33,13 +30,20 @@ export default {
   },
   methods: {
     logOut() {
+      localStorage.clear();
       this.$store.state.isAdmin = false;
+      this.$store.state.isAuth = false;
+      this.$router.push("/");
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+a {
+  display: flex;
+  flex-direction: row;
+}
 .admin-header {
   position: sticky;
   top: 0;
@@ -88,8 +92,8 @@ export default {
   background: #59abff;
   border: 1px solid #59abff;
   box-sizing: border-box;
-  box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
+  box-shadow: 0px 1px 8px 1px rgba(0, 0, 0, 0.1);
+  border-radius: 7px;
   width: 79px;
   height: 31px;
   color: #fff;

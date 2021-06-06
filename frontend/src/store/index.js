@@ -7,9 +7,17 @@ export default createStore({
     showNotify: false,
     notymessage: "",
     currentUser: {
+      id: localStorage.id,
       name: localStorage.name,
       token: localStorage.token,
       email: localStorage.email,
+    },
+    currentAdmin: {
+      id: localStorage.id,
+      name: localStorage.name,
+      token: localStorage.token,
+      email: localStorage.email,
+      admin: localStorage.admin,
     },
     adList: [
       {
@@ -44,11 +52,14 @@ export default createStore({
       },
     ],
     userAdList: [],
+    adminAdList: [],
     selectAd: {
       name: "",
-      data: "",
+      category: "",
+      date: "",
       id: "",
       comment: "",
+      status: "",
     },
   },
   getters: {
