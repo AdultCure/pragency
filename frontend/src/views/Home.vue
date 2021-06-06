@@ -4,7 +4,9 @@
     <div class="home-wrapper">
       <div class="home-content">
         <section class="about">
-          <h2 class="about-header">Коротко о нас</h2>
+          <h2 class="about-header">
+            Коротко о нас
+          </h2>
           <div class="about-content">
             <ul class="about-text">
               <p>
@@ -158,6 +160,11 @@ export default {
   components: {
     MainHeader,
     MainFooter,
+  },
+  data() {
+    return {
+      show: true,
+    };
   },
 };
 </script>

@@ -7,6 +7,8 @@
 <script>
 export default {
   name: "App",
+  components: {},
+  methods: {},
   mounted() {
     if (localStorage.token) {
       this.$store.state.isAuth = true;

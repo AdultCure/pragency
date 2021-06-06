@@ -98,8 +98,17 @@ export default {
           localStorage.setItem("name", response.data.name);
           localStorage.setItem("email", this.email);
           localStorage.setItem("token", response.data.token);
-          setTimeout(location.reload(), 100);
+          this.$store.state.currentUser.name = localStorage.name;
+          this.$store.state.currentUser.token = localStorage.token;
+          this.$store.state.currentUser.email = localStorage.email;
+          this.$store.state.isAuth = true;
+          setTimeout(() => {
+            this.$store.state.notymessage = "Вы успешно авторизировались!";
+            this.$store.state.showNotify = true;
+            setTimeout(() => (this.$store.state.showNotify = false), 2000);
+          });
           this.closeModal();
+          this.$router.push("/orders");
         })
         .catch((error) => {
           this.loginError = "Неверный логин или пароль";

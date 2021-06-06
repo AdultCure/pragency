@@ -20,12 +20,12 @@
                 </h3>
               </div>
             </div>
-            <button
+            <!-- <button
               class="profile-password-button"
               @click="showPassword = !showPassword"
             >
               Изменить пароль
-            </button>
+            </button> -->
             <transition name="fade">
               <form
                 class="profile-change-password"

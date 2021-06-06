@@ -52,6 +52,7 @@
           <p class="form-error" v-if="v$.password.confirm.$error">
             Пароли не совпадают
           </p>
+          <div class="reg-error">{{ regError }}</div>
           <button class="modal-button" type="submit">
             Зарегистрироваться
           </button>
@@ -108,6 +109,7 @@ export default {
   data() {
     return {
       showReg: false,
+      regError: "",
     };
   },
 
@@ -127,6 +129,11 @@ export default {
           password: this.state.password.password.toString(),
         })
         .then((response) => {
+          setTimeout(() => {
+            this.$store.state.notymessage = "Регистрация прошла успешно!";
+            this.$store.state.showNotify = true;
+            setTimeout(() => (this.$store.state.showNotify = false), 2000);
+          });
           this.$emit("closeRegModal");
           this.$emit("openAuth");
           console.log(response);
@@ -143,6 +150,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.reg-error {
+  font-size: 10px;
+  color: #ffa740;
+}
 .modal {
   max-width: 320px;
   width: 100%;
@@ -208,6 +219,7 @@ export default {
   height: 43px;
   color: #ffffff;
   font-size: 12px;
+  margin-top: 10px;
 
   & :hover {
     background: #fff;
