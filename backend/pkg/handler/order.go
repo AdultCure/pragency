@@ -62,6 +62,22 @@ func (h *Handler) getAllOrdersAdmin(c *gin.Context) {
 	})
 }
 
+func (h *Handler) getOrderByIdAdmin(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
+		return
+	}
+
+	order, err := h.services.Order.GetOneAdmin(id)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, order)
+}
+
 func (h *Handler) getOrdersById(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -81,6 +97,27 @@ func (h *Handler) getOrdersById(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, order)
+}
+
+func (h *Handler) updateOrderAdmin (c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
+		return
+	}
+
+	var input backend.UpdateOrderInput
+	if err := c.BindJSON(&input); err != nil {
+		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	if err := h.services.UpdateAdmin(id, input); err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, statusResponse{"ok"})
 }
 
 func (h *Handler) updateOrder(c *gin.Context) {
@@ -107,6 +144,24 @@ func (h *Handler) updateOrder(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, statusResponse{"ok"})
+}
+
+func (h *Handler) deleteOrderAdmin(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
+		return
+	}
+
+	err = h.services.Order.DeleteAdmin(id)
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, statusResponse{
+		Status: "ok",
+	})
 }
 
 func (h *Handler) deleteOrder(c *gin.Context) {

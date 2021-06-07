@@ -1,48 +1,85 @@
 <template>
   <div class="admin-order">
-    <admin-header />
+    <admin-header/>
     <div class="order-wrapper">
       <div class="order-content">
         <div class="order-card">
           <div class="card-left-content">
             <p class="order-info">
-              Категория услуги: {{ $store.state.selectAd.category }}
+              Категория услуги: {{ response.category }}
             </p>
             <p class="order-info">
-              Ф.И.О. клиента: {{ $store.state.selectAd.name }}
+              Ф.И.О. клиента: {{ response.user_name }}
             </p>
             <p class="order-comment">Комментарий:</p>
             <textarea
-              disabled
-              class="order-comment-text"
-              name="comment"
-              cols="30"
-              rows="10"
-              v-model="$store.state.selectAd.comment"
+                disabled
+                class="order-comment-text"
+                name="comment"
+                cols="30"
+                rows="10"
+                v-model="response.comment"
             ></textarea>
           </div>
           <div class="card-right-content">
             <p class="order-info">
-              Номер заказа: №{{ $store.state.selectAd.id }}
+              Номер заказа: №{{ response.id }}
             </p>
             <p class="order-info">
-              Дата создания: {{ $store.state.selectAd.date }}
+              Дата создания: {{ response.date }}
             </p>
             <p class="order-info-change">Изменить статус заказа:</p>
             <div class="select">
-              <select class="admin-select" size="1" name="sort" id="">
+              <select class="admin-select" name="sort" id="">
                 <option
-                  class="admin-select-option"
-                  value="Create Data"
-                  autofocus
-                  >Дата создания</option
+                    class="admin-select-option"
+                    v-for="option of statusMap"
+                    :key="option.id"
+                    :selected="response.status"
+                    @click="statusCase(option.id); console.log(option.id)"
                 >
-                <option value="zalupa artema">zalupa artema</option>
+                  {{ option.name }}
+                </option>
+<!--                                <option-->
+<!--                                    class="admin-select-option"-->
+<!--                                    >-->
+<!--                                  {{ response.status }}-->
+<!--                                </option>-->
+<!--                                <option-->
+<!--                                    class="admin-select-option"-->
+<!--                                    @click="statusCase(1)"-->
+<!--                                >Заказ создан-->
+<!--                                </option-->
+<!--                                >-->
+<!--                                <option-->
+<!--                                    class="admin-select-option"-->
+<!--                                    @click="statusCase(2)"-->
+<!--                                >Заказ принят-->
+<!--                                </option-->
+<!--                                >-->
+<!--                                <option-->
+<!--                                    class="admin-select-option"-->
+<!--                                    @click="statusCase(3)"-->
+<!--                                >Заказ ожидает оплаты-->
+<!--                                </option-->
+<!--                                >-->
+<!--                                <option-->
+<!--                                    class="admin-select-option"-->
+<!--                                    @click="statusCase(4)"-->
+<!--                                >Принимаем решение о работе-->
+<!--                                </option-->
+<!--                                >-->
+<!--                                <option-->
+<!--                                    class="admin-select-option"-->
+<!--                                    @click="statusCase(5)"-->
+<!--                                >Сделка завершена-->
+<!--                                </option-->
+<!--                                >-->
               </select>
             </div>
             <div class="order-buttons">
-              <button class="order-save">Сохранить</button>
-              <button class="order-delete">Удалить</button>
+              <button class="order-save" @click="editOrder">Сохранить</button>
+              <button class="order-delete" @click="deleteOrder">Удалить</button>
             </div>
           </div>
         </div>
@@ -54,6 +91,7 @@
 <script>
 import axios from "axios";
 import AdminHeader from "@/components/AdminHeader.vue";
+
 export default {
   name: "Status",
   components: {
@@ -61,29 +99,125 @@ export default {
   },
   data() {
     return {
-      id: this.$store.state.selectAd.id,
-      data: "",
+      id: this.$route.params.id,
+      response: {
+        id: "",
+        category: "",
+        status: "",
+        date: "",
+        comment: "",
+        user_id: "",
+        user_name: "",
+      },
+      statusMap: [
+        {
+          name: "Заказ создан",
+          id: 1
+        },
+        {
+          name: "Заказ принят",
+          id: 2
+        },
+        {
+          name: "Заказ ожидает оплаты",
+          id: 3
+        },
+        {
+          name: "Принимаем решение о работе",
+          id: 4
+        },
+        {
+          name: "Сделка завершена",
+          id: 5
+        }
+      ]
     };
   },
   created() {
     axios
-      .get(`http://localhost:8000/api/order/${this.id}`, {
-        headers: {
-          Authorization: `Bearer ${this.$store.state.currentUser.token}`,
-        },
-      })
-      .then((response) => {
-        this.data = response.data.category;
-        this.$store.state.adminAdList = response.data.data;
-        if (this.$store.state.adminAdList !== null) {
-          this.$store.state.adminAdList.reverse();
-        }
-      })
-      .catch((error) => {
-        this.loginError = "Упс! Что-то пошло не так :(";
-        console.log(error);
-      });
+        .get(`http://localhost:8000/api/admin/` + `${this.id}`, {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.currentUser.token}`,
+          },
+        })
+        .then((response) => {
+          this.response.id = response.data.id
+          this.response.category = response.data.category
+          this.response.status = response.data.status
+          this.response.date = response.data.date
+          this.response.comment = response.data.comment
+          this.response.user_id = response.data.user_id
+          this.response.user_name = response.data.user_name
+          console.log(this.response.status)
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   },
+  methods: {
+    deleteOrder() {
+      axios
+          .delete(`http://localhost:8000/api/admin/` + `${this.id}`, {
+            headers: {
+              Authorization: `Bearer ${this.$store.state.currentUser.token}`,
+            },
+          })
+          .then((response) => {
+            console.log(response.data)
+            this.$router.push(`/admin/admin-panel`)
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+    },
+
+    statusCase(id) {
+      switch (id) {
+        case 1: if (id === 1)  {
+          this.response.status = "Заказ создан";
+        }
+          break
+        case 2: if (id === 2) {
+          this.response.status = "Заказ принят";
+        }
+          break
+        case 3: if (id === 3) {
+          this.response.status = "Заказ ожидает оплаты";
+        }
+          break
+        case 4: if (id === 4) {
+          this.response.status = "Принимаем решение о работе";
+        }
+          break
+        case 5: if (id === 5) {
+          this.response.status = "Сделка завершена";
+        }
+          break
+      }
+    },
+
+    editOrder() {
+      axios
+          .put(`http://localhost:8000/api/admin/` + `${this.id}`,
+              {
+                category: this.response.category,
+                status: this.response.status,
+                date: this.response.date,
+                comment: this.response.comment
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${this.$store.state.currentUser.token}`,
+                }
+              })
+          .then((response) => {
+            console.log(response.data)
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+    }
+  }
 };
 </script>
 
@@ -94,10 +228,12 @@ export default {
   width: 100%;
   margin: 0 auto;
 }
+
 .order-content {
   max-width: 1210px;
   padding: 50px 115px 90px;
 }
+
 .order-card {
   background: #ffffff;
   border: 1px solid #d0d0d0;
@@ -109,10 +245,12 @@ export default {
   justify-content: space-between;
   height: 634px;
 }
+
 .card-left-content {
   max-width: 700px;
   width: 100%;
 }
+
 .order-info {
   font-weight: normal;
   font-size: 18px;
@@ -121,6 +259,7 @@ export default {
   margin: 0 0 25px 0;
   align-self: flex-end;
 }
+
 .order-comment {
   font-weight: normal;
   font-size: 18px;
@@ -128,6 +267,7 @@ export default {
   color: #4d5155;
   margin: 0 0 15px 0;
 }
+
 .order-comment-text {
   height: 300px;
   max-width: 670px;
@@ -140,12 +280,14 @@ export default {
   margin: 0;
   padding: 15px;
 }
+
 .card-right-content {
   display: flex;
   flex-direction: column;
   max-width: 370px;
   width: 100%;
 }
+
 .order-info-change {
   font-weight: normal;
   font-size: 18px;
@@ -153,6 +295,7 @@ export default {
   color: #4d5155;
   margin: 80px 0 10px 0;
 }
+
 .select {
   font-weight: normal;
   font-size: 18px;
@@ -160,6 +303,7 @@ export default {
   border: none;
   outline: none;
 }
+
 .admin-select {
   font-weight: normal;
   font-size: 18px;
@@ -167,9 +311,11 @@ export default {
   border: none;
   outline: none;
 }
+
 .order-buttons {
   margin-top: auto;
 }
+
 .order-save {
   width: 160px;
   height: 34px;
@@ -186,11 +332,13 @@ export default {
   transition: linear 0.2s;
   cursor: pointer;
   margin-right: 23px;
+
   &:hover {
     background: #fff;
     color: #59abff;
   }
 }
+
 .order-delete {
   width: 160px;
   height: 34px;
@@ -207,6 +355,7 @@ export default {
   transition: linear 0.2s;
   cursor: pointer;
   margin-right: 23px;
+
   &:hover {
     background: #fff;
     color: #ff3131;

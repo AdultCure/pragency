@@ -1,26 +1,21 @@
 <template>
   <div class="orders">
-    <main-header />
+    <main-header/>
     <div class="orders-wrapper">
-      <div class="orders-content" v-if="$store.state.userAdList !== null">
+      <div class="orders-content" v-if="ordersList !== null">
         <div
-          class="orders-card"
-          v-for="userAd of $store.state.userAdList"
-          :key="userAd.id"
+            class="orders-card"
+            v-for="card of ordersList"
+            :key="card.id"
         >
-          <router-link :to="{ name: 'Status' }" class="router">
+          <router-link :to="'/orders/status/' + currentId" class="router">
             <ul
-              class="orders-card-content active-card"
-              @click="
-                $store.state.selectAd.category = userAd.category;
-                $store.state.selectAd.date = userAd.date;
-                $store.state.selectAd.id = userAd.id;
-                $store.state.selectAd.comment = userAd.comment;
-              "
+                class="orders-card-content active-card"
+                @click="currentId = card.id;"
             >
-              <li class="orders-name">{{ userAd.category }}</li>
-              <li class="orders-date">{{ userAd.date }}</li>
-              <li class="orders-number">Заказ №{{ userAd.id }}</li>
+              <li class="orders-name">{{ card.category }}</li>
+              <li class="orders-date">{{ card.date }}</li>
+              <li class="orders-number">Заказ №{{ card.id }}</li>
             </ul>
           </router-link>
         </div>
@@ -29,12 +24,12 @@
         <h3 class="orders-no-cards-header">
           Тут пока ничего нет. Вы можете заказать услугу
           <router-link :to="{ name: 'Services' }" class="orders-no-cards-link"
-            >здесь
+          >здесь
           </router-link>
         </h3>
       </div>
     </div>
-    <main-footer />
+    <main-footer/>
   </div>
 </template>
 
@@ -50,25 +45,25 @@ export default {
   },
   name: "Orders",
   data() {
-    return {};
+    return {
+      ordersList: [],
+      currentId: ""
+    };
   },
   created() {
     axios
-      .get("http://localhost:8000/api/order", {
-        headers: {
-          Authorization: `Bearer ${this.$store.state.currentUser.token}`,
-        },
-      })
-      .then((response) => {
-        this.$store.state.userAdList = response.data.data;
-        if (this.$store.state.userAdList !== null) {
-          this.$store.state.userAdList.reverse();
-        }
-      })
-      .catch((error) => {
-        this.loginError = "Упс! Что-то пошло не так :(";
-        console.log(error);
-      });
+        .get("http://localhost:8000/api/order", {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.currentUser.token}`,
+          },
+        })
+        .then((response) => {
+          this.ordersList = response.data.data
+        })
+        .catch((error) => {
+          this.loginError = "Упс! Что-то пошло не так :(";
+          console.log(error);
+        });
   },
 };
 </script>

@@ -13,7 +13,7 @@ CREATE TABLE orders
     category  varchar(255) not null,
     status    varchar(255) not null,
     date      varchar(255) not null,
-    comment   varchar(255) not null,
+    comment   varchar(2000) not null,
     user_id   varchar(255) not null,
     user_name varchar(255) not null
 );

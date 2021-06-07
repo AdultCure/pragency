@@ -55,12 +55,12 @@
           </div>
           <div class="status-line"></div>
           <div class="status-info">
-            <h2 class="status-name">{{ $store.state.selectAd.category }}</h2>
+            <h2 class="status-name">{{ response.category }}</h2>
             <span class="status-number"
-              >Заказ №{{ $store.state.selectAd.id }}</span
+              >Заказ №{{ response.id }}</span
             >
             <span class="status-date"
-              >Дата создания: {{ $store.state.selectAd.data }}</span
+              >Дата создания: {{ response.data }}</span
             >
             <span class="status-comment">Ваш комментарий:</span>
             <textarea
@@ -69,7 +69,7 @@
               name="comment"
               cols="30"
               rows="10"
-              v-model="$store.state.selectAd.comment"
+              v-model="response.comment"
             ></textarea>
           </div>
         </div>
@@ -82,6 +82,7 @@
 <script>
 import MainFooter from "../components/MainFooter.vue";
 import MainHeader from "../components/MainHeader.vue";
+import axios from "axios";
 export default {
   name: "Status",
   components: {
@@ -89,7 +90,38 @@ export default {
     MainHeader,
   },
   data() {
-    return {};
+    return {
+      id: this.$route.params.id,
+      response: {
+        id: "",
+        category: "",
+        status: "",
+        date: "",
+        comment: "",
+        user_id: "",
+        user_name: "",
+      }
+    };
+  },
+  created() {
+    axios
+        .get(`http://localhost:8000/api/order/` + `${this.id}`, {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.currentUser.token}`,
+          },
+        })
+        .then((response) => {
+          this.response.id = response.data.id
+          this.response.category = response.data.category
+          this.response.status = response.data.status
+          this.response.date = response.data.date
+          this.response.comment = response.data.comment
+          this.response.user_id = response.data.user_id
+          this.response.user_name = response.data.user_name
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   },
 };
 </script>

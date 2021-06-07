@@ -59,6 +59,15 @@ func (r *OrderPostgres) GetAllAdmin() ([]backend.Order, error) {
 	return orders, err
 }
 
+func (r *OrderPostgres) GetOneAdmin(orderId int) (backend.Order, error) {
+	var order backend.Order
+
+	query := fmt.Sprintf(`SELECT tl.id, tl.category, tl. status, tl.date, tl.comment, tl.user_id, tl.user_name FROM %s tl WHERE id = $1`, ordersTable)
+	err := r.db.Get(&order, query, orderId)
+
+	return order, err
+}
+
 func (r *OrderPostgres) GetById(userId, orderId int) (backend.Order, error) {
 	var order backend.Order
 
@@ -70,11 +79,61 @@ func (r *OrderPostgres) GetById(userId, orderId int) (backend.Order, error) {
 	return order, err
 }
 
+func (r *OrderPostgres) DeleteAdmin(orderId int) error {
+	query := fmt.Sprintf("DELETE FROM %s tl USING %s ul WHERE tl.id = ul.order_id AND ul.order_id=$1",
+		ordersTable, usersListTable)
+	_, err := r.db.Exec(query, orderId)
+
+	return err
+}
+
 func (r *OrderPostgres) Delete(userId, orderId int) error {
 	query := fmt.Sprintf("DELETE FROM %s tl USING %s ul WHERE tl.id = ul.order_id AND ul.user_id=$1 AND ul.order_id=$2",
 		ordersTable, usersListTable)
 	_, err := r.db.Exec(query, userId, orderId)
 
+	return err
+}
+
+func (r *OrderPostgres) UpdateAdmin(orderId int, input backend.UpdateOrderInput) error {
+	setValues := make([]string, 0)
+	args := make([]interface{}, 0)
+	argId := 1
+
+	if input.Category != nil {
+		setValues = append(setValues, fmt.Sprintf("category=$%d", argId))
+		args = append(args, *input.Category)
+		argId++
+	}
+
+	if input.Status != nil {
+		setValues = append(setValues, fmt.Sprintf("status=$%d", argId))
+		args = append(args, *input.Status)
+		argId++
+	}
+
+	if input.Date != nil {
+		setValues = append(setValues, fmt.Sprintf("date=$%d", argId))
+		args = append(args, *input.Date)
+		argId++
+	}
+
+	if input.Comment != nil {
+		setValues = append(setValues, fmt.Sprintf("comment=$%d", argId))
+		args = append(args, *input.Comment)
+		argId++
+	}
+
+	setQuery := strings.Join(setValues, ", ")
+
+	query := fmt.Sprintf("UPDATE %s tl SET %s FROM %s ul WHERE tl.id = ul.order_id AND ul.order_id=$%d",
+		ordersTable, setQuery, usersListTable, argId)
+	args = append(args, orderId)
+
+	logrus.Debugf("updateQuery: %s", query)
+	logrus.Debugf("args: %s", args)
+
+	_, err := r.db.Exec(query, args...)
 	return err
 }
 
@@ -85,25 +144,25 @@ func (r *OrderPostgres) Update(userId, orderId int, input backend.UpdateOrderInp
 
 	if input.Category != nil {
 		setValues = append(setValues, fmt.Sprintf("category=$%d", argId))
-		args  = append(args, *input.Category)
+		args = append(args, *input.Category)
 		argId++
 	}
 
 	if input.Status != nil {
 		setValues = append(setValues, fmt.Sprintf("status=$%d", argId))
-		args  = append(args, *input.Status)
+		args = append(args, *input.Status)
 		argId++
 	}
 
 	if input.Date != nil {
 		setValues = append(setValues, fmt.Sprintf("date=$%d", argId))
-		args  = append(args, *input.Date)
+		args = append(args, *input.Date)
 		argId++
 	}
 
 	if input.Comment != nil {
 		setValues = append(setValues, fmt.Sprintf("comment=$%d", argId))
-		args  = append(args, *input.Comment)
+		args = append(args, *input.Comment)
 		argId++
 	}
 

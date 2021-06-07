@@ -25,6 +25,21 @@ func (s *OrderService) GetAllAdmin() ([]backend.Order, error) {
 	return s.repo.GetAllAdmin()
 }
 
+func (s *OrderService) GetOneAdmin(orderId int) (backend.Order, error) {
+	return s.repo.GetOneAdmin(orderId)
+}
+
+func (s *OrderService) UpdateAdmin(orderId int, input backend.UpdateOrderInput) error {
+	if err := input.Validate(); err != nil {
+		return err
+	}
+	return s.repo.UpdateAdmin(orderId, input)
+}
+
+func (s *OrderService) DeleteAdmin(orderId int) error {
+	return s.repo.DeleteAdmin(orderId)
+}
+
 func (s *OrderService) GetById(userId, orderId int) (backend.Order, error) {
 	return s.repo.GetById(userId, orderId)
 }

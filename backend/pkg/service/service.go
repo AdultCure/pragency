@@ -17,6 +17,9 @@ type Order interface {
 	Create(UserId int, order backend.Order) (int, error)
 	GetAll(UserId int) ([]backend.Order, error)
 	GetAllAdmin() ([]backend.Order, error)
+	GetOneAdmin(orderId int) (backend.Order, error)
+	UpdateAdmin(orderId int, input backend.UpdateOrderInput) error
+	DeleteAdmin(orderId int) error
 	GetById(UserId, orderId int) (backend.Order, error)
 	Delete(userId, orderId int) error
 	Update(userId, orderId int, input backend.UpdateOrderInput) error

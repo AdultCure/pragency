@@ -18,7 +18,7 @@ const routes = [
     component: () => import("../views/Orders.vue"),
   },
   {
-    path: "/orders/status",
+    path: "/orders/status/:id",
     name: "Status",
     component: () => import("../views/Status.vue"),
   },
@@ -38,7 +38,7 @@ const routes = [
     component: () => import("../views/AdminPanel/AdminPanel.vue"),
   },
   {
-    path: "/admin/admin-order",
+    path: "/admin/admin-order/:id",
     name: "AdminOrder",
     component: () => import("../views/AdminPanel/AdminOrder.vue"),
   },

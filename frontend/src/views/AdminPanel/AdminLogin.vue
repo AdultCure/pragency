@@ -5,9 +5,9 @@
         <h3 class="modal-header">Вход в панель администратора</h3>
         <form action="" @submit.prevent="formSubmit">
           <p class="input-header">Логин:</p>
-          <input type="text" name="login" class="modal-input" v-model="email" />
+          <input type="text" name="login" class="modal-input" v-model="email"/>
           <p class="input-header">Пароль:</p>
-          <input type="password" class="modal-input" v-model="password" />
+          <input type="password" class="modal-input" v-model="password"/>
           <div class="login-error">{{ loginError }}</div>
           <button class="modal-button" type="submit">
             Войти
@@ -20,6 +20,7 @@
 
 <script>
 import axios from "axios";
+
 export default {
   name: "AdminLogin",
   data() {
@@ -75,10 +76,12 @@ export default {
   color: #ffa740;
   margin-bottom: 10px;
 }
+
 .admin {
   background: #ffffff;
   min-height: 100vh;
 }
+
 .modal {
   width: 320px;
   height: 421px;
@@ -90,9 +93,11 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
 .modal-content {
   margin: 60px 50px;
 }
+
 .modal-header {
   font-size: 18px;
   line-height: 22px;
@@ -101,6 +106,7 @@ export default {
   font-weight: 500;
   margin-bottom: 24px;
 }
+
 .input-header {
   margin: 0 0 5px 0;
   font-weight: 500;
@@ -108,6 +114,7 @@ export default {
   line-height: 15px;
   color: #ffffff;
 }
+
 .modal-input {
   width: 220px;
   height: 30px;
@@ -115,6 +122,7 @@ export default {
   outline: none;
   border: none;
 }
+
 .modal-button {
   background: #ffffff;
   box-shadow: 0px 1px 8px 1px rgba(0, 0, 0, 0.1);
@@ -128,6 +136,7 @@ export default {
   outline: none;
   border: none;
   cursor: pointer;
+
   &:hover {
     background: #e5e5e5;
   }

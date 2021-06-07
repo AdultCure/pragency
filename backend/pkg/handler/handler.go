@@ -54,6 +54,9 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		admin := api.Group("/admin")
 		{
 			admin.GET("", h.getAllOrdersAdmin)
+			admin.GET("/:id", h.getOrderByIdAdmin)
+			admin.PUT("/:id", h.updateOrderAdmin)
+			admin.DELETE("/:id", h.deleteOrderAdmin)
 		}
 	}
 

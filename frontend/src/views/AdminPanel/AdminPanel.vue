@@ -23,8 +23,8 @@
         </div>
         <div
           class="card"
-          v-for="card of $store.state.adminAdList"
-          :key="card.id"
+        v-for="card of ordersList"
+        :key="card.id"
         >
           <div class="card-left-content">
             <p class="card-category">{{ card.category }}</p>
@@ -42,15 +42,11 @@
           <div class="card-right-content">
             <p class="card-number">Номер заказа: №{{ card.id }}</p>
             <p class="card-date">{{ card.date }}</p>
-            <router-link :to="{ name: 'AdminOrder' }" class="router"
+            <router-link :to="'/admin/admin-order/' + currentId" class="router"
               ><button
                 class="card-button"
                 @click="
-                  $store.state.selectAd.name = card.user_name;
-                  $store.state.selectAd.category = card.category;
-                  $store.state.selectAd.date = card.date;
-                  $store.state.selectAd.id = card.id;
-                  $store.state.selectAd.comment = card.comment;
+                  currentId = card.id;
                 "
               >
                 Подробнее
@@ -71,18 +67,23 @@ export default {
   components: {
     AdminHeader,
   },
+
+  data() {
+    return {
+      ordersList: [],
+      currentId: ""
+    }
+  },
+
   created() {
     axios
       .get("http://localhost:8000/api/admin", {
         headers: {
-          Authorization: `Bearer ${this.$store.state.currentUser.token}`,
+          Authorization: `Bearer ${this.$store.state.currentAdmin.token}`,
         },
       })
       .then((response) => {
-        this.$store.state.adminAdList = response.data.data;
-        if (this.$store.state.adminAdList !== null) {
-          this.$store.state.adminAdList.reverse();
-        }
+        this.ordersList = response.data.data
       })
       .catch((error) => {
         this.loginError = "Упс! Что-то пошло не так :(";
