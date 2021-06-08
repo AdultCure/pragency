@@ -1,17 +1,13 @@
 <template>
   <div class="orders">
-    <main-header/>
+    <main-header />
     <div class="orders-wrapper">
       <div class="orders-content" v-if="ordersList !== null">
-        <div
-            class="orders-card"
-            v-for="card of ordersList"
-            :key="card.id"
-        >
+        <div class="orders-card" v-for="card of ordersList" :key="card.id">
           <router-link :to="'/orders/status/' + currentId" class="router">
             <ul
-                class="orders-card-content active-card"
-                @click="currentId = card.id;"
+              class="orders-card-content active-card"
+              @click="currentId = card.id"
             >
               <li class="orders-name">{{ card.category }}</li>
               <li class="orders-date">{{ card.date }}</li>
@@ -24,12 +20,12 @@
         <h3 class="orders-no-cards-header">
           Тут пока ничего нет. Вы можете заказать услугу
           <router-link :to="{ name: 'Services' }" class="orders-no-cards-link"
-          >здесь
+            >здесь
           </router-link>
         </h3>
       </div>
     </div>
-    <main-footer/>
+    <main-footer />
   </div>
 </template>
 
@@ -47,30 +43,31 @@ export default {
   data() {
     return {
       ordersList: [],
-      currentId: ""
+      currentId: "",
     };
   },
   created() {
     axios
-        .get("http://localhost:8000/api/order", {
-          headers: {
-            Authorization: `Bearer ${this.$store.state.currentUser.token}`,
-          },
-        })
-        .then((response) => {
-          this.ordersList = response.data.data
-        })
-        .catch((error) => {
-          this.loginError = "Упс! Что-то пошло не так :(";
-          console.log(error);
-        });
+      .get("http://localhost:8000/api/order", {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.currentUser.token}`, // Заголовок авторизации
+        },
+      })
+      .then((response) => {
+        this.ordersList = response.data.data;
+        this.ordersList.reverse();
+      })
+      .catch((error) => {
+        this.loginError = "Упс! Что-то пошло не так :(";
+        console.log(error);
+      });
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .orders-wrapper {
-  min-height: calc(100vh - 220px);
+  min-height: calc(100vh - 80px - 80px);
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;

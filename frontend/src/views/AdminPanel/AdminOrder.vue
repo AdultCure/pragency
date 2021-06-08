@@ -1,80 +1,41 @@
 <template>
   <div class="admin-order">
-    <admin-header/>
+    <admin-header />
     <div class="order-wrapper">
       <div class="order-content">
         <div class="order-card">
           <div class="card-left-content">
-            <p class="order-info">
-              Категория услуги: {{ response.category }}
-            </p>
-            <p class="order-info">
-              Ф.И.О. клиента: {{ response.user_name }}
-            </p>
+            <p class="order-info">Категория услуги: {{ response.category }}</p>
+            <p class="order-info">Ф.И.О. клиента: {{ response.user_name }}</p>
             <p class="order-comment">Комментарий:</p>
             <textarea
-                disabled
-                class="order-comment-text"
-                name="comment"
-                cols="30"
-                rows="10"
-                v-model="response.comment"
+              disabled
+              class="order-comment-text"
+              name="comment"
+              cols="30"
+              rows="10"
+              v-model="response.comment"
             ></textarea>
           </div>
           <div class="card-right-content">
-            <p class="order-info">
-              Номер заказа: №{{ response.id }}
-            </p>
-            <p class="order-info">
-              Дата создания: {{ response.date }}
-            </p>
+            <p class="order-info">Номер заказа: №{{ response.id }}</p>
+            <p class="order-info">Дата создания: {{ response.date }}</p>
             <p class="order-info-change">Изменить статус заказа:</p>
             <div class="select">
-              <select class="admin-select" name="sort" id="">
+              <select
+                class="admin-select"
+                name="sort"
+                id=""
+                v-model="response.status"
+              >
                 <option
-                    class="admin-select-option"
-                    v-for="option of statusMap"
-                    :key="option.id"
-                    :selected="response.status"
-                    @click="statusCase(option.id); console.log(option.id)"
+                  class="admin-select-option"
+                  v-for="option of statusMap"
+                  :key="option.id"
+                  v-bind:selected="response.status"
                 >
                   {{ option.name }}
                 </option>
-<!--                                <option-->
-<!--                                    class="admin-select-option"-->
-<!--                                    >-->
-<!--                                  {{ response.status }}-->
-<!--                                </option>-->
-<!--                                <option-->
-<!--                                    class="admin-select-option"-->
-<!--                                    @click="statusCase(1)"-->
-<!--                                >Заказ создан-->
-<!--                                </option-->
-<!--                                >-->
-<!--                                <option-->
-<!--                                    class="admin-select-option"-->
-<!--                                    @click="statusCase(2)"-->
-<!--                                >Заказ принят-->
-<!--                                </option-->
-<!--                                >-->
-<!--                                <option-->
-<!--                                    class="admin-select-option"-->
-<!--                                    @click="statusCase(3)"-->
-<!--                                >Заказ ожидает оплаты-->
-<!--                                </option-->
-<!--                                >-->
-<!--                                <option-->
-<!--                                    class="admin-select-option"-->
-<!--                                    @click="statusCase(4)"-->
-<!--                                >Принимаем решение о работе-->
-<!--                                </option-->
-<!--                                >-->
-<!--                                <option-->
-<!--                                    class="admin-select-option"-->
-<!--                                    @click="statusCase(5)"-->
-<!--                                >Сделка завершена-->
-<!--                                </option-->
-<!--                                >-->
               </select>
             </div>
             <div class="order-buttons">
@@ -111,119 +72,107 @@ export default {
       },
       statusMap: [
         {
-          name: "Заказ создан",
-          id: 1
+          name: "Ваш заказ создан",
+          id: "1",
         },
         {
           name: "Заказ принят",
-          id: 2
+          id: "2",
         },
         {
           name: "Заказ ожидает оплаты",
-          id: 3
+          id: "3",
         },
         {
           name: "Принимаем решение о работе",
-          id: 4
+          id: "4",
         },
         {
           name: "Сделка завершена",
-          id: 5
-        }
-      ]
+          id: "5",
+        },
+      ],
     };
   },
-  created() {
+  beforeMount() {
     axios
-        .get(`http://localhost:8000/api/admin/` + `${this.id}`, {
-          headers: {
-            Authorization: `Bearer ${this.$store.state.currentUser.token}`,
-          },
-        })
-        .then((response) => {
-          this.response.id = response.data.id
-          this.response.category = response.data.category
-          this.response.status = response.data.status
-          this.response.date = response.data.date
-          this.response.comment = response.data.comment
-          this.response.user_id = response.data.user_id
-          this.response.user_name = response.data.user_name
-          console.log(this.response.status)
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      .get(`http://localhost:8000/api/admin/` + `${this.id}`, {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.currentAdmin.token}`,
+        },
+      })
+      .then((response) => {
+        this.response.id = response.data.id;
+        this.response.category = response.data.category;
+        this.response.status = response.data.status;
+        this.response.date = response.data.date;
+        this.response.comment = response.data.comment;
+        this.response.user_id = response.data.user_id;
+        this.response.user_name = response.data.user_name;
+        console.log(this.response.status);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
   methods: {
     deleteOrder() {
       axios
-          .delete(`http://localhost:8000/api/admin/` + `${this.id}`, {
-            headers: {
-              Authorization: `Bearer ${this.$store.state.currentUser.token}`,
-            },
-          })
-          .then((response) => {
-            console.log(response.data)
-            this.$router.push(`/admin/admin-panel`)
-          })
-          .catch((error) => {
-            console.log(error);
-          })
-    },
-
-    statusCase(id) {
-      switch (id) {
-        case 1: if (id === 1)  {
-          this.response.status = "Заказ создан";
-        }
-          break
-        case 2: if (id === 2) {
-          this.response.status = "Заказ принят";
-        }
-          break
-        case 3: if (id === 3) {
-          this.response.status = "Заказ ожидает оплаты";
-        }
-          break
-        case 4: if (id === 4) {
-          this.response.status = "Принимаем решение о работе";
-        }
-          break
-        case 5: if (id === 5) {
-          this.response.status = "Сделка завершена";
-        }
-          break
-      }
+        .delete(`http://localhost:8000/api/admin/` + `${this.id}`, {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.currentAdmin.token}`,
+          },
+        })
+        .then((response) => {
+          setTimeout(() => {
+            this.$store.state.notymessage = "Заказ удалён";
+            this.$store.state.showNotify = true;
+            setTimeout(() => (this.$store.state.showNotify = false), 2000);
+          });
+          this.$router.push(`/admin/admin-panel`);
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
 
     editOrder() {
       axios
-          .put(`http://localhost:8000/api/admin/` + `${this.id}`,
-              {
-                category: this.response.category,
-                status: this.response.status,
-                date: this.response.date,
-                comment: this.response.comment
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${this.$store.state.currentUser.token}`,
-                }
-              })
-          .then((response) => {
-            console.log(response.data)
-          })
-          .catch((error) => {
-            console.log(error);
-          })
-    }
-  }
+        .put(
+          `http://localhost:8000/api/admin/` + `${this.id}`,
+          {
+            category: this.response.category,
+            status: this.response.status,
+            date: this.response.date,
+            comment: this.response.comment,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${this.$store.state.currentAdmin.token}`,
+            },
+          }
+        )
+        .then((response) => {
+          setTimeout(() => {
+            this.$store.state.notymessage = "Изменения сохранены";
+            this.$store.state.showNotify = true;
+            setTimeout(() => (this.$store.state.showNotify = false), 2000);
+          });
+          this.$router.push(`/admin/admin-panel`);
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .order-wrapper {
-  min-height: calc(100vh - 220px);
+  min-height: calc(100vh - 80px - 80px);
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;

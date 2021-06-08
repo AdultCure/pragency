@@ -20,54 +20,23 @@
                 </h3>
               </div>
             </div>
-            <!-- <button
-              class="profile-password-button"
-              @click="showPassword = !showPassword"
-            >
-              Изменить пароль
-            </button> -->
-            <transition name="fade">
-              <form
-                class="profile-change-password"
-                v-show="showPassword"
-                @submit.prevent
-              >
-                <div class="profile-change">
-                  <span class="profile-new-password">Новый пароль: </span
-                  ><input type="text" class="profile-password" />
-                </div>
-                <div class="profile-change">
-                  <span class="profile-new-password">Подтвердите пароль: </span
-                  ><input type="text" class="profile-password" />
-                </div>
-                <button class="profile-password-button">Сохранить</button>
-              </form>
-            </transition>
           </div>
           <div class="orders-history">
             <h3 class="history-title">История заказов:</h3>
-            <div
-              class="orders-card-content"
-              v-if="$store.state.userAdList !== null"
-            >
+            <div class="orders-card-content" v-if="ordersList !== null">
               <div
                 class="history-card"
-                v-for="userAd of $store.state.userAdList.slice(0, 3)"
-                :key="userAd.id"
+                v-for="card of ordersList.slice(0, 3)"
+                :key="card.id"
               >
-                <router-link :to="{ name: 'Status' }" class="router"
+                <router-link :to="'/orders/status/' + currentId" class="router"
                   ><div
                     class="history-card-content"
-                    @click="
-                      $store.state.selectAd.category = userAd.category;
-                      $store.state.selectAd.date = userAd.date;
-                      $store.state.selectAd.id = userAd.id;
-                      $store.state.selectAd.comment = userAd.comment;
-                    "
+                    @click="currentId = card.id"
                   >
-                    <p class="history-card-name">{{ userAd.category }}</p>
+                    <p class="history-card-name">{{ card.category }}</p>
                     <p class="history-card-number">
-                      Номер заказа: №{{ userAd.id }}
+                      Номер заказа: №{{ card.id }}
                     </p>
                   </div></router-link
                 >
@@ -78,6 +47,7 @@
                 />
               </div>
             </div>
+            <div class="orders-no-cards" v-else>У вас пока нет заказов</div>
             <router-link :to="{ name: 'Orders' }" class="history-look-orders"
               ><p>Посмотреть все заказы</p></router-link
             >
@@ -102,7 +72,9 @@ export default {
   name: "Profile",
   data() {
     return {
-      showPassword: false,
+      id: this.$route.params.id,
+      ordersList: [],
+      currentId: "",
     };
   },
   methods: {},
@@ -114,10 +86,8 @@ export default {
         },
       })
       .then((response) => {
-        this.$store.state.userAdList = response.data.data;
-        if (this.$store.state.userAdList !== null) {
-          this.$store.state.userAdList.reverse();
-        }
+        this.ordersList = response.data.data;
+        this.ordersList.reverse();
       })
       .catch((error) => {
         this.loginError = "Упс! Что-то пошло не так :(";
@@ -132,7 +102,7 @@ export default {
   color: #4d5155;
 }
 .profile-wrapper {
-  min-height: calc(100vh - 160px);
+  min-height: calc(100vh - 80px - 80px);
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
@@ -167,76 +137,13 @@ export default {
   line-height: 39px;
   color: #373737;
   margin-bottom: 5px;
+  word-break: break-word;
 }
 .profile-email {
   font-weight: normal;
   font-size: 14px;
   line-height: 17px;
   color: #4d5155;
-}
-.profile-password-button {
-  outline: none;
-  transition: linear 0.2s;
-  background: #fff;
-  border: 1px solid #59abff;
-  box-sizing: border-box;
-  box-shadow: 0px 1px 8px 1px rgba(0, 0, 0, 0.1);
-  border-radius: 6px;
-  max-width: 175px;
-  width: 100%;
-  height: 37px;
-  color: #59abff;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 17px;
-  align-self: flex-end;
-  margin: 0 65px 25px 0;
-  cursor: pointer;
-  &:hover {
-    background: #59abff;
-    color: #fff;
-  }
-  &:last-child {
-    max-width: 140px;
-    width: 100%;
-    background: #59abff;
-    color: #fff;
-  }
-}
-.profile-new-password {
-  display: block;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 17px;
-  color: #373737;
-  width: 165px;
-}
-.profile-password {
-  font-size: 14px;
-  line-height: 15px;
-  color: #4d5155;
-  border: none;
-  border-bottom: 1px solid #59abff;
-  outline: none;
-  padding: 0 5px;
-  max-width: 200px;
-  width: 100%;
-  height: 17px;
-  margin-bottom: 30px;
-}
-.profile-change {
-  display: flex;
-}
-.profile-change-password {
-  transition: linear 0.2s;
-}
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 .orders-history {
   margin-left: auto;
@@ -286,5 +193,11 @@ export default {
   font-size: 10px;
   line-height: 12px;
   color: #59abff;
+}
+.orders-no-cards {
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  color: #4d5155;
 }
 </style>

@@ -5,9 +5,9 @@
         <h3 class="modal-header">Вход в панель администратора</h3>
         <form action="" @submit.prevent="formSubmit">
           <p class="input-header">Логин:</p>
-          <input type="text" name="login" class="modal-input" v-model="email"/>
+          <input type="text" name="login" class="modal-input" v-model="email" />
           <p class="input-header">Пароль:</p>
-          <input type="password" class="modal-input" v-model="password"/>
+          <input type="password" class="modal-input" v-model="password" />
           <div class="login-error">{{ loginError }}</div>
           <button class="modal-button" type="submit">
             Войти

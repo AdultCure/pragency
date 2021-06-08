@@ -19,12 +19,17 @@
         </button>
       </div>
     </div>
+    <notification ref="notify" v-show="$store.state.showNotify" />
   </div>
 </template>
 
 <script>
+import Notification from "./notifications/Notification.vue";
 export default {
   name: "AdminHeader",
+  components: {
+    Notification,
+  },
   data() {
     return {};
   },

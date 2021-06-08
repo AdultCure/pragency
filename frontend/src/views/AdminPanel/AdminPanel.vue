@@ -6,11 +6,19 @@
         <div class="admin-flex">
           <span class="admin-sort">Сортировка заказов:</span>
           <div class="select">
-            <select class="admin-select" size="1" name="sort" id="">
-              <option class="admin-select-option" value="Create Data" autofocus
-                >Дата создания</option
+            <select
+              class="admin-select"
+              size="1"
+              name="sort"
+              v-model="selectCategory"
+            >
+              <option value="0">Все категории</option>
+              <option
+                v-for="category in categories"
+                :key="category.id"
+                :value="category.category"
+                >{{ category.category }}</option
               >
-              <option value="zalupa artema">zalupa artema</option>
             </select>
           </div>
           <input
@@ -18,64 +26,98 @@
             type="seatch"
             name=""
             id=""
-            placeholder="Поиск"
+            placeholder="Поиск по имени"
+            v-model="search"
           />
         </div>
-        <div
-          class="card"
-        v-for="card of ordersList"
-        :key="card.id"
-        >
-          <div class="card-left-content">
-            <p class="card-category">{{ card.category }}</p>
-            <p class="card-name">{{ card.user_name }}</p>
-            <p class="card-comment">Комментарий:</p>
-            <textarea
-              disabled
-              class="card-comment-text"
-              name="comment"
-              cols="30"
-              rows="10"
-              v-model="card.comment"
-            ></textarea>
-          </div>
-          <div class="card-right-content">
-            <p class="card-number">Номер заказа: №{{ card.id }}</p>
-            <p class="card-date">{{ card.date }}</p>
-            <router-link :to="'/admin/admin-order/' + currentId" class="router"
-              ><button
-                class="card-button"
-                @click="
-                  currentId = card.id;
-                "
-              >
-                Подробнее
-              </button>
-            </router-link>
+        <div class="card-content" v-if="ordersList !== null">
+          <div class="card" v-for="card of filteredOrders" :key="card.id">
+            <div class="card-left-content">
+              <p class="card-category">{{ card.category }}</p>
+              <p class="card-name">{{ card.user_name }}</p>
+              <p class="card-date">Статус заказа: {{ card.status }}</p>
+              <p class="card-comment">Комментарий:</p>
+              <textarea
+                disabled
+                class="card-comment-text"
+                name="comment"
+                cols="30"
+                rows="10"
+                v-model="card.comment"
+              ></textarea>
+            </div>
+
+            <div class="card-right-content">
+              <p class="card-number">Номер заказа: №{{ card.id }}</p>
+              <p class="card-date">{{ card.date }}</p>
+              <router-link
+                :to="'/admin/admin-order/' + currentId"
+                class="router"
+                ><button class="card-button" @click="currentId = card.id">
+                  Подробнее
+                </button>
+              </router-link>
+            </div>
           </div>
         </div>
+        <div class="no-card" v-else>Заказы отсутствуют</div>
       </div>
     </div>
+    <!-- <main-footer /> -->
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import AdminHeader from "../../components/AdminHeader.vue";
+// import MainFooter from "../../components/MainFooter.vue";
 export default {
   name: "AdminPanel",
   components: {
     AdminHeader,
+    // MainFooter,
   },
 
   data() {
     return {
       ordersList: [],
-      currentId: ""
-    }
+      currentId: "",
+      search: "",
+      categories: [
+        { category: "Реклама в интернете" },
+        { category: "Реклама на ТВ" },
+        { category: "Рекламные производства" },
+        { category: "Наружная Реклама" },
+        { category: "Реклама на радио" },
+      ],
+      selectCategory: "0",
+    };
+  },
+  computed: {
+    filteredOrders: function() {
+      return (
+        this.ordersList
+          // Фильтруем по категории
+          .filter((card) => {
+            return (
+              this.selectCategory == "0" || card.category == this.selectCategory
+            );
+          })
+
+          // Фильтруем по полю поиска
+          .filter((card) => {
+            return (
+              this.search == "" ||
+              card.user_name
+                .toLowerCase()
+                .indexOf(this.search.toLowerCase()) !== -1
+            );
+          })
+      );
+    },
   },
 
-  created() {
+  beforeMount() {
     axios
       .get("http://localhost:8000/api/admin", {
         headers: {
@@ -83,7 +125,8 @@ export default {
         },
       })
       .then((response) => {
-        this.ordersList = response.data.data
+        this.ordersList = response.data.data;
+        this.ordersList.reverse();
       })
       .catch((error) => {
         this.loginError = "Упс! Что-то пошло не так :(";
@@ -116,23 +159,17 @@ export default {
   color: #4d5155;
   margin-right: 15px;
 }
-.admin-select {
-  height: 17px;
-  background: #e3e3e3;
-  color: #373737;
+.select {
+  position: relative;
+}
+.select select {
+  display: block;
+  background: none;
   border: none;
   outline: none;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 17px;
-}
-.admin-select-option {
-  display: block;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 17px;
-  color: #373737;
-  width: 107px;
+  font-family: inherit;
+  font-size: 1rem;
+  color: #444;
 }
 .admin-search {
   display: block;
@@ -212,5 +249,16 @@ p {
     background: #fff;
     color: #59abff;
   }
+}
+.no-card {
+  background: #ffffff;
+  border: 1px solid #d0d0d0;
+  box-sizing: border-box;
+  box-shadow: 0px 1px 8px 1px rgba(0, 0, 0, 0.1);
+  border-radius: 13px;
+  height: 60px;
+  padding-left: 30px;
+  display: flex;
+  align-items: center;
 }
 </style>

@@ -13,7 +13,10 @@
                 alt="status-icon"
                 class="status-img"
               />
-              <div class="status-check status-check-active"></div>
+              <div
+                class="status-check"
+                :class="{ active: response.status == 'Ваш заказ создан' }"
+              ></div>
               <p class="status-text">Ваш заказ создан</p>
             </div>
             <div class="status-item">
@@ -22,7 +25,10 @@
                 alt="status-icon"
                 class="status-img"
               />
-              <div class="status-check"></div>
+              <div
+                class="status-check"
+                :class="{ active: response.status == 'Заказ принят' }"
+              ></div>
               <p class="status-text">Ваш заказ принят</p>
             </div>
             <div class="status-item">
@@ -31,7 +37,10 @@
                 alt="status-icon"
                 class="status-img"
               />
-              <div class="status-check"></div>
+              <div
+                class="status-check"
+                :class="{ active: response.status == 'Заказ ожидает оплаты' }"
+              ></div>
               <p class="status-text">Заказ ожидает оплаты</p>
             </div>
             <div class="status-item">
@@ -40,7 +49,12 @@
                 alt="status-icon"
                 class="status-img"
               />
-              <div class="status-check"></div>
+              <div
+                class="status-check"
+                :class="{
+                  active: response.status == 'Принимаем решение о работе',
+                }"
+              ></div>
               <p class="status-text">Принимаем решение о работе</p>
             </div>
             <div class="status-item">
@@ -49,19 +63,18 @@
                 alt="status-icon"
                 class="status-img"
               />
-              <div class="status-check"></div>
+              <div
+                class="status-check"
+                :class="{ active: response.status == 'Сделка завершена' }"
+              ></div>
               <p class="status-text">Сделка завершена</p>
             </div>
           </div>
           <div class="status-line"></div>
           <div class="status-info">
             <h2 class="status-name">{{ response.category }}</h2>
-            <span class="status-number"
-              >Заказ №{{ response.id }}</span
-            >
-            <span class="status-date"
-              >Дата создания: {{ response.data }}</span
-            >
+            <span class="status-number">Заказ №{{ response.id }}</span>
+            <span class="status-date">Дата создания: {{ response.data }}</span>
             <span class="status-comment">Ваш комментарий:</span>
             <textarea
               disabled
@@ -100,35 +113,35 @@ export default {
         comment: "",
         user_id: "",
         user_name: "",
-      }
+      },
     };
   },
   created() {
     axios
-        .get(`http://localhost:8000/api/order/` + `${this.id}`, {
-          headers: {
-            Authorization: `Bearer ${this.$store.state.currentUser.token}`,
-          },
-        })
-        .then((response) => {
-          this.response.id = response.data.id
-          this.response.category = response.data.category
-          this.response.status = response.data.status
-          this.response.date = response.data.date
-          this.response.comment = response.data.comment
-          this.response.user_id = response.data.user_id
-          this.response.user_name = response.data.user_name
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      .get(`http://localhost:8000/api/order/` + `${this.id}`, {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.currentUser.token}`,
+        },
+      })
+      .then((response) => {
+        this.response.id = response.data.id;
+        this.response.category = response.data.category;
+        this.response.status = response.data.status;
+        this.response.date = response.data.date;
+        this.response.comment = response.data.comment;
+        this.response.user_id = response.data.user_id;
+        this.response.user_name = response.data.user_name;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .status-wrapper {
-  min-height: calc(100vh - 220px);
+  min-height: calc(100vh - 80px - 80px);
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
@@ -182,7 +195,7 @@ export default {
   box-sizing: border-box;
   margin: 26px 0 12px;
 }
-.status-check-active {
+.active {
   background-color: #9cf58d;
   border-color: #9cf58d;
 }
