@@ -11,10 +11,6 @@
 <script>
 export default {
   name: "Notification",
-  data() {
-    return {};
-  },
-  mounted() {},
 };
 </script>
 

@@ -79,14 +79,17 @@ export default {
   },
   methods: {
     focusInput() {
+      // Автофокус при открытии окна авторизации
       this.$refs.modalAuth.$refs.loginInput.focus();
     },
     openModalAuth() {
+      // Показать окно авторизации
       this.$refs.modalAuth.showShadow = true;
       this.$refs.modalAuth.showAuth = true;
       setTimeout(this.focusInput, 100);
     },
     logOut() {
+      // При выходе из аккаунта очищаем localStorage, меняем состояние авторизации, показываем сообщение и пушим на главную
       localStorage.clear();
       this.$store.state.isAuth = false;
       setTimeout(() => {

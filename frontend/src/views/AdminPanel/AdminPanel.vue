@@ -63,19 +63,16 @@
         <div class="no-card" v-else>Заказы отсутствуют</div>
       </div>
     </div>
-    <!-- <main-footer /> -->
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import AdminHeader from "../../components/AdminHeader.vue";
-// import MainFooter from "../../components/MainFooter.vue";
 export default {
   name: "AdminPanel",
   components: {
     AdminHeader,
-    // MainFooter,
   },
 
   data() {
@@ -94,6 +91,7 @@ export default {
     };
   },
   computed: {
+    // Фильтрация заказов
     filteredOrders: function() {
       return (
         this.ordersList
@@ -117,14 +115,16 @@ export default {
     },
   },
 
-  beforeMount() {
+  created() {
+    // Get-запрос на сервер при создании страницы
     axios
       .get("http://localhost:8000/api/admin", {
         headers: {
-          Authorization: `Bearer ${this.$store.state.currentAdmin.token}`,
+          Authorization: `Bearer ${this.$store.state.currentAdmin.token}`, // Заголовок авторизации админа
         },
       })
       .then((response) => {
+        // Получаем с сервера список всех заказов и кладем в массив
         this.ordersList = response.data.data;
         this.ordersList.reverse();
       })

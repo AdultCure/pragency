@@ -47,13 +47,15 @@ export default {
     };
   },
   created() {
+    // Get-запрос при создании страницы
     axios
       .get("http://localhost:8000/api/order", {
         headers: {
-          Authorization: `Bearer ${this.$store.state.currentUser.token}`, // Заголовок авторизации
+          Authorization: `Bearer ${this.$store.state.currentUser.token}`, // Заголовок авторизации юзера
         },
       })
       .then((response) => {
+        // Получаем с сервера список всех заказов юзера и кладем в массив
         this.ordersList = response.data.data;
         this.ordersList.reverse();
       })

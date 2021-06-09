@@ -60,17 +60,19 @@ export default {
       },
     };
   },
-  computed: mapGetters(["fullAdList"]),
+  computed: mapGetters(["fullAdList"]), // Получаем весь список рекламы из vuex store
   methods: {
     async submit() {
-      let Data = new Date();
+      // Функция заказа из ServicesOrder
+      let Data = new Date(); // Создание текущей даты
       let Year = Data.getFullYear();
       let Month = Data.getMonth();
       let Day = Data.getDate();
 
-      await axios
+      await axios // Post-запрос на backend
         .post(
           "http://localhost:8000/api/order",
+          // Передаём данные выбранного заказа, дату создания и комментарий из ServicesOrder на сервер
           {
             category: this.selectAd.name.toString(),
             status: "Ваш заказ создан",
@@ -86,6 +88,7 @@ export default {
           }
         )
         .then((response) => {
+          // Если нет ошибки, показываем сообщение о заказе и пушим на страницу orders
           setTimeout(() => {
             this.$store.state.notymessage = "Заказ принят в обработку";
             this.$store.state.showNotify = true;
@@ -95,11 +98,13 @@ export default {
           console.log(response);
         })
         .catch((error) => {
+          // В случае ошибки - выводим в консоль
           this.loginError = "Упс! Что-то пошло не так :(";
           console.log(error);
         });
     },
     openModal() {
+      // Проверка авторизации: если авторизирован - открыть попап с заказом, если нет - открыть окно авторизации
       if (this.$store.state.isAuth === false) {
         this.$refs.servauth.showShadow = true;
         this.$refs.servauth.showModalServices = true;
@@ -109,6 +114,7 @@ export default {
       }
     },
     getImgUrl(pic) {
+      // Получение правильного url для изображений
       return require("../assets/pictures/" + pic);
     },
   },

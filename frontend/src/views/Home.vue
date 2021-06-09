@@ -161,11 +161,6 @@ export default {
     MainHeader,
     MainFooter,
   },
-  data() {
-    return {
-      show: true,
-    };
-  },
 };
 </script>
 

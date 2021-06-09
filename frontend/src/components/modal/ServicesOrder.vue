@@ -58,6 +58,7 @@ export default {
       this.showShadow = false;
     },
     create() {
+      // Проверяем на наличие комментария: если есть - передаем функцию в Services и там вызываем submit(), иначе показываем ошибку
       if (this.comment.length) {
         this.$emit("submitHandler");
         this.closeModal();

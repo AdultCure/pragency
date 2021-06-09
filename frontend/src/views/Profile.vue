@@ -26,7 +26,10 @@
             <div class="orders-card-content" v-if="ordersList !== null">
               <div
                 class="history-card"
-                v-for="card of ordersList.slice(0, 3)"
+                v-for="card of ordersList.slice(
+                  0,
+                  3
+                ) /* Выводим только 3 последних заказа */"
                 :key="card.id"
               >
                 <router-link :to="'/orders/status/' + currentId" class="router"
@@ -72,13 +75,12 @@ export default {
   name: "Profile",
   data() {
     return {
-      id: this.$route.params.id,
       ordersList: [],
       currentId: "",
     };
   },
-  methods: {},
-  mounted() {
+  created() {
+    // Get-запрос при создании страницы
     axios
       .get("http://localhost:8000/api/order", {
         headers: {
@@ -86,6 +88,7 @@ export default {
         },
       })
       .then((response) => {
+        // Получаем с сервера список всех заказов юзера и кладем в массив
         this.ordersList = response.data.data;
         this.ordersList.reverse();
       })

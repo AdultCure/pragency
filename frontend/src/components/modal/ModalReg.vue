@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import useValidate from "@vuelidate/core";
+import useValidate from "@vuelidate/core"; // Подключаем Vuelidate
 import {
   alphaNum,
   email,
@@ -77,6 +77,7 @@ import axios from "axios";
 export default {
   name: "ModalReg",
   setup() {
+    // Реактивные данные формы
     const state = reactive({
       name: "",
       email: "",
@@ -85,6 +86,7 @@ export default {
         confirm: "",
       },
     });
+    // Валидация
     const rules = computed(() => {
       return {
         name: { required, minLength: minLength(6) },
@@ -115,6 +117,7 @@ export default {
 
   methods: {
     submitForm() {
+      // При успешной валидации проходим регистрацию
       this.v$.$validate();
       if (!this.v$.$error) {
         this.regPost();
@@ -122,25 +125,30 @@ export default {
     },
 
     async regPost() {
+      // Post-запрос на сервер
       await axios
         .post("http://localhost:8000/auth/sign-up", {
+          // Передаем данные из инпутов на сервер
           name: this.state.name.toString(),
           email: this.state.email.toString(),
           password: this.state.password.password.toString(),
         })
         .then((response) => {
+          // При успешном запросе выводим сообщение
           setTimeout(() => {
             this.$store.state.notymessage = "Регистрация прошла успешно!";
             this.$store.state.showNotify = true;
             setTimeout(() => (this.$store.state.showNotify = false), 2000);
           });
+          // Передаем событие в ModalAuth: закрытие окна регистрации
           this.$emit("closeRegModal");
+          // Передаем событие в ModalAuth: открытие окна авторизации
           this.$emit("openAuth");
           console.log(response);
         })
         .catch((error) => {
+          // При ошибке регистрации выводим сообщение
           this.showReg = true;
-          this.$store.state.isAuth = false;
           this.regError = "Такой аккаунт уже существует";
           console.log(error);
         });

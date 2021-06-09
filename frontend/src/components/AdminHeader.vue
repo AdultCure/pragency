@@ -35,6 +35,7 @@ export default {
   },
   methods: {
     logOut() {
+      // При выходе из аккаунта очищаем localStorage, меняем состояние авторизации и пушим на главную
       localStorage.clear();
       this.$store.state.isAdmin = false;
       this.$store.state.isAuth = false;

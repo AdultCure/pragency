@@ -71,15 +71,18 @@ export default {
     };
   },
   methods: {
+    // Автофокус при открытии окна регистрации
     focusInput() {
       this.$refs.modalReg.$refs.nameInput.focus();
     },
     openModalReg() {
+      // Откритие окна регистрации
       this.showAuth = false;
       this.$refs.modalReg.showReg = true;
       setTimeout(this.focusInput, 100);
     },
     closeModal() {
+      // Закрытие всех окон
       this.showShadow = false;
       this.showAuth = false;
       this.$refs.modalReg.showReg = false;
@@ -89,21 +92,28 @@ export default {
       this.signIn();
     },
     async signIn() {
+      // Post-запрос на сервер
       await axios
         .post("http://localhost:8000/auth/sign-in", {
+          // Передаем на сервер данные из инпутов
           email: this.email.toString(),
           password: this.password.toString(),
         })
         .then((response) => {
+          // При успешном запросе сохраняем данные в localStorage
           localStorage.setItem("id", response.data.id);
           localStorage.setItem("name", response.data.name);
           localStorage.setItem("email", this.email);
           localStorage.setItem("token", response.data.token);
+
+          //Передаем данные из localStorage в store(объект currentUser)
           this.$store.state.currentUser.name = localStorage.name;
           this.$store.state.currentUser.token = localStorage.token;
           this.$store.state.currentUser.email = localStorage.email;
           this.$store.state.currentUser.id = localStorage.id;
+          // Меняем состояние авторизации
           this.$store.state.isAuth = true;
+          // Выводим сообщение, закрываем окно и пушим в orders
           setTimeout(() => {
             this.$store.state.notymessage = "Вы успешно авторизировались!";
             this.$store.state.showNotify = true;
@@ -113,6 +123,7 @@ export default {
           this.$router.push("/orders");
         })
         .catch((error) => {
+          // Выводим ошибку, если введенные данные не совпадают с бд
           this.loginError = "Неверный логин или пароль";
           console.log(error);
         });

@@ -59,9 +59,11 @@ const router = createRouter({
   routes,
 });
 
+// Защита роутинга
 router.beforeEach((to, from, next) => {
   const currentUser = localStorage.token;
   const requireAuth = to.matched.some((record) => record.meta.auth);
+  // Проверяем на наличие токена авторизации: если есть - пропускаем, если нет - пушим на страницу ошибки
   if (requireAuth && !currentUser) {
     next({ name: "Error" });
   } else {
@@ -71,6 +73,7 @@ router.beforeEach((to, from, next) => {
 router.beforeEach((to, from, next) => {
   const currentAdmin = localStorage.admin;
   const requireAdmin = to.matched.some((record) => record.meta.admin);
+  // Проверяем на наличие токена админа: если есть - пропускаем, если нет - пушим на страницу ошибки
   if (requireAdmin && !currentAdmin) {
     next({ name: "Error" });
   } else {

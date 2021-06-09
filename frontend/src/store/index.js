@@ -2,17 +2,19 @@ import { createStore } from "vuex";
 
 export default createStore({
   state: {
-    isAuth: false,
-    isAdmin: false,
-    showNotify: false,
-    notymessage: "",
+    isAuth: false, // состояние авторизации юзера
+    isAdmin: false, // состояние авторизации админа
+    showNotify: false, // Показать сообщение
+    notymessage: "", // Текст сообщения
     currentUser: {
+      // данные текущего юзера
       id: localStorage.id,
       name: localStorage.name,
       token: localStorage.token,
       email: localStorage.email,
     },
     currentAdmin: {
+      // данные текущего админа
       id: localStorage.id,
       name: localStorage.name,
       token: localStorage.token,
@@ -20,6 +22,7 @@ export default createStore({
       admin: localStorage.admin,
     },
     adList: [
+      // список всех услуг
       {
         name: "Реклама в интернете",
         description:
@@ -51,21 +54,11 @@ export default createStore({
         img: "adradio.svg",
       },
     ],
-    userAdList: [],
-    adminAdList: [],
-    selectAd: {
-      name: "",
-      category: "",
-      date: "",
-      id: "",
-      comment: "",
-      status: "",
-    },
   },
   getters: {
+    // Геттер для массива adList
     fullAdList(state) {
       return state.adList;
     },
   },
-  actions: {},
 });

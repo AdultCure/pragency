@@ -94,7 +94,8 @@ export default {
       ],
     };
   },
-  beforeMount() {
+  created() {
+    // Get-запрос на сервер при создании страницы
     axios
       .get(`http://localhost:8000/api/admin/` + `${this.id}`, {
         headers: {
@@ -102,6 +103,7 @@ export default {
         },
       })
       .then((response) => {
+        // Получаем данные заказа с сервера и кладем их в объект response
         this.response.id = response.data.id;
         this.response.category = response.data.category;
         this.response.status = response.data.status;
@@ -117,6 +119,7 @@ export default {
   },
   methods: {
     deleteOrder() {
+      // Delete-запрос на сервер
       axios
         .delete(`http://localhost:8000/api/admin/` + `${this.id}`, {
           headers: {
@@ -124,6 +127,7 @@ export default {
           },
         })
         .then((response) => {
+          // Удаляем заказ, выводим сообщение и пушим в админ-панель
           setTimeout(() => {
             this.$store.state.notymessage = "Заказ удалён";
             this.$store.state.showNotify = true;
@@ -138,9 +142,11 @@ export default {
     },
 
     editOrder() {
+      // Put-запрос на сервер
       axios
         .put(
           `http://localhost:8000/api/admin/` + `${this.id}`,
+          // Передаем данные о заказе из объекта response на сервер
           {
             category: this.response.category,
             status: this.response.status,
@@ -154,6 +160,7 @@ export default {
           }
         )
         .then((response) => {
+          // При успешном запросе выводим сообщение и пушим в админ-панель
           setTimeout(() => {
             this.$store.state.notymessage = "Изменения сохранены";
             this.$store.state.showNotify = true;

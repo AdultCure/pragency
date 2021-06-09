@@ -35,28 +35,35 @@ export default {
       this.signIn();
     },
     async signIn() {
+      // Post-запрос на сервер
       await axios
         .post("http://localhost:8000/auth/sign-in", {
+          // Передаем данные из инпутов
           email: this.email,
           password: this.password,
         })
         .then((response) => {
+          // При успешном запросе сохраняем данные в localStorage
           localStorage.setItem("id", response.data.id);
           localStorage.setItem("name", response.data.name);
           localStorage.setItem("email", this.email);
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("admin", response.data.admin);
 
+          //Передаем данные из localStorage в store(объект currentAdmin)
           this.$store.state.currentAdmin.name = localStorage.name;
           this.$store.state.currentAdmin.token = localStorage.token;
           this.$store.state.currentAdmin.email = localStorage.email;
           this.$store.state.currentAdmin.id = localStorage.id;
           this.$store.state.currentAdmin.admin = localStorage.admin;
 
+          // Проверяем пользователя на наличие прав админа
           if (response.data.admin === "admin") {
+            // При наличии прав пушим в админ-панель
             this.$store.state.isAdmin = true;
             this.$router.push("/admin/admin-panel");
           } else {
+            // При отсутствии прав - выводим ошибку
             this.loginError = "Неверный логин или пароль";
             console.log("Неверный логин или пароль");
           }

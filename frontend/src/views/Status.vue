@@ -74,7 +74,7 @@
           <div class="status-info">
             <h2 class="status-name">{{ response.category }}</h2>
             <span class="status-number">Заказ №{{ response.id }}</span>
-            <span class="status-date">Дата создания: {{ response.data }}</span>
+            <span class="status-date">Дата создания: {{ response.date }}</span>
             <span class="status-comment">Ваш комментарий:</span>
             <textarea
               disabled
@@ -117,6 +117,7 @@ export default {
     };
   },
   created() {
+    // Get-запрос при создании страницы
     axios
       .get(`http://localhost:8000/api/order/` + `${this.id}`, {
         headers: {
@@ -124,6 +125,7 @@ export default {
         },
       })
       .then((response) => {
+        // Получаем с сервера данные текущего заказа юзера и кладем в объект
         this.response.id = response.data.id;
         this.response.category = response.data.category;
         this.response.status = response.data.status;

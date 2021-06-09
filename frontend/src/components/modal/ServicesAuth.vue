@@ -40,10 +40,12 @@ export default {
   },
   methods: {
     closeModal() {
+      // Открытие модального окна
       this.showModalServices = false;
       this.showShadow = false;
     },
     showModalAuth() {
+      // Открытие окна авторизации
       this.showModalServices = false;
       this.$refs.modalAuth.showShadow = true;
       this.$refs.modalAuth.showAuth = true;
