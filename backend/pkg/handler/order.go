@@ -7,6 +7,8 @@ import (
 	"strconv"
 )
 
+// Функция создания заказа
+
 func (h *Handler) createOrder(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -29,9 +31,13 @@ func (h *Handler) createOrder(c *gin.Context) {
 	})
 }
 
+// Структура для получения json объекта из всех заказов
+
 type getAllOrdersResponse struct {
 	Data []backend.Order `json:"data"`
 }
+
+// Функция получения всех заказов пользователя
 
 func (h *Handler) getAllOrders(c *gin.Context) {
 	userId, err := getUserId(c)
@@ -50,6 +56,8 @@ func (h *Handler) getAllOrders(c *gin.Context) {
 	})
 }
 
+// Функция получения всех заказов для админа
+
 func (h *Handler) getAllOrdersAdmin(c *gin.Context) {
 	orders, err := h.services.Order.GetAllAdmin()
 	if err != nil {
@@ -61,6 +69,8 @@ func (h *Handler) getAllOrdersAdmin(c *gin.Context) {
 		Data: orders,
 	})
 }
+
+// Функция получения одного заказа для админа
 
 func (h *Handler) getOrderByIdAdmin(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
@@ -77,6 +87,8 @@ func (h *Handler) getOrderByIdAdmin(c *gin.Context) {
 
 	c.JSON(http.StatusOK, order)
 }
+
+// Функция получения одного заказа для пользователя
 
 func (h *Handler) getOrdersById(c *gin.Context) {
 	userId, err := getUserId(c)
@@ -99,6 +111,8 @@ func (h *Handler) getOrdersById(c *gin.Context) {
 	c.JSON(http.StatusOK, order)
 }
 
+// Функция обновления заказа для админа
+
 func (h *Handler) updateOrderAdmin (c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -120,31 +134,7 @@ func (h *Handler) updateOrderAdmin (c *gin.Context) {
 	c.JSON(http.StatusOK, statusResponse{"ok"})
 }
 
-func (h *Handler) updateOrder(c *gin.Context) {
-	userId, err := getUserId(c)
-	if err != nil {
-		return
-	}
-
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
-		return
-	}
-
-	var input backend.UpdateOrderInput
-	if err := c.BindJSON(&input); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	if err := h.services.Update(userId, id, input); err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	c.JSON(http.StatusOK, statusResponse{"ok"})
-}
+// Функция удаления заказа для админа
 
 func (h *Handler) deleteOrderAdmin(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
@@ -154,29 +144,6 @@ func (h *Handler) deleteOrderAdmin(c *gin.Context) {
 	}
 
 	err = h.services.Order.DeleteAdmin(id)
-	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	c.JSON(http.StatusOK, statusResponse{
-		Status: "ok",
-	})
-}
-
-func (h *Handler) deleteOrder(c *gin.Context) {
-	userId, err := getUserId(c)
-	if err != nil {
-		return
-	}
-
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
-		return
-	}
-
-	err = h.services.Order.Delete(userId, id)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

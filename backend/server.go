@@ -6,9 +6,13 @@ import (
 	"time"
 )
 
+// Объявление структуры сервера из базового пакета net/http
+
 type Server struct {
 	httpServer *http.Server
 }
+
+// Функция создания сервера
 
 func (s *Server) Run(port string, handler http.Handler) error {
 	s.httpServer = &http.Server{
@@ -21,6 +25,8 @@ func (s *Server) Run(port string, handler http.Handler) error {
 
 	return s.httpServer.ListenAndServe()
 }
+
+// Функция закрытия сервера
 
 func (s *Server) Shutdown(ctx context.Context) error {
 	return s.httpServer.Shutdown(ctx)

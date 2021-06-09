@@ -5,11 +5,15 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+// Константы для бд
+
 const (
 	usersTable = "users"
 	usersListTable  = "users_list"
 	ordersTable     = "orders"
 )
+
+// Структура конфига для бд
 
 type Config struct {
 	Host     string
@@ -19,6 +23,8 @@ type Config struct {
 	DBName   string
 	SSLMode  string
 }
+
+// Функция подключения к бд
 
 func NewPostgresDB(cfg Config) (*sqlx.DB, error) {
 	db, err := sqlx.Open("postgres", fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",

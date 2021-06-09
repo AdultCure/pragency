@@ -1,5 +1,7 @@
+#Порт
 port: "8000"
 
+#Данные для бд
 db:
   username: "postgres"
   host: "localhost"

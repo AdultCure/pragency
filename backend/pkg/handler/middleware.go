@@ -7,10 +7,14 @@ import (
 	"strings"
 )
 
+// Константы авторизации
+
 const (
 	authorizationHeader = "Authorization"
 	userCtx = "userId"
 )
+
+// Функция проверки пользователя при запросе
 
 func (h *Handler) userIdentity(c *gin.Context) {
 	header := c.GetHeader(authorizationHeader)
@@ -19,13 +23,15 @@ func (h *Handler) userIdentity(c *gin.Context) {
 		return
 	}
 
+	// Проверка заголовков запроса
+
 	headerParts := strings.Split(header, " ")
 	if len(headerParts) != 2 {
 		newErrorResponse(c, http.StatusUnauthorized, "invalid auth header")
 		return
 	}
 
-	// парсинг токена
+	// Парсинг токена
 	userId, err := h.services.Authorization.ParseToken(headerParts[1])
 	if err != nil {
 		newErrorResponse(c, http.StatusUnauthorized, err.Error())
@@ -34,6 +40,8 @@ func (h *Handler) userIdentity(c *gin.Context) {
 
 	c.Set(userCtx, userId)
 }
+
+// Функция получения id пользователя
 
 func getUserId(c *gin.Context) (int, error) {
 	id, ok := c.Get(userCtx)

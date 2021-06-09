@@ -6,13 +6,19 @@ import (
 	backend "pragency"
 )
 
+// Структура авторизации в бд
+
 type AuthPostgres struct {
 	db *sqlx.DB
 }
 
+// Функция передачи в дб
+
 func NewAuthPostgres(db *sqlx.DB) *AuthPostgres {
 	return &AuthPostgres{db: db}
 }
+
+// Функция создания пользователя в бд
 
 func (r *AuthPostgres) CreateUser(user backend.User) (int, error) {
 	var id int
@@ -25,7 +31,7 @@ func (r *AuthPostgres) CreateUser(user backend.User) (int, error) {
 	return id, nil
 }
 
-// получение пользователя по email и password из бд
+// Получение пользователя из бд
 
 func (r *AuthPostgres) GetUser(email, password string) (backend.User, error) {
 	var user backend.User

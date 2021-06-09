@@ -10,33 +10,44 @@ import (
 	"time"
 )
 
-// соль для хэширования пароля
+// Соль для хэширования пароля
+
 const (
-	// соль
+	// Соль
 	salt = "vlb25hv2lk523j5l23bv5l23"
-	// ключ подписи
+	// Ключ подписи
 	signingKey = "3k4h5lk34h5l3k4&#@"
-	// время валидности токина
+	// Время валидности токина
 	tokenTTL = 128 * time.Hour
 )
+
+// Структура получения токена
 
 type tokenClaims struct {
 	jwt.StandardClaims
 	UserId int `json:"user_id"`
 }
 
+// Структура авторизации
+
 type AuthService struct {
 	repo repository.Authorization
 }
+
+// Функция передачи в репозиторий
 
 func NewAuthService(repo repository.Authorization) *AuthService {
 	return &AuthService{repo: repo}
 }
 
+// Функция создания пользователя
+
 func (s *AuthService) CreateUser(user backend.User) (int, error) {
 	user.Password = generatePasswordHash(user.Password)
 	return s.repo.CreateUser(user)
 }
+
+// Функция генерации JWT ключа
 
 func (s *AuthService) GenerateToken(email, password string) (string, error) {
 	// получение пользователя из бд
@@ -45,7 +56,7 @@ func (s *AuthService) GenerateToken(email, password string) (string, error) {
 		return "", err
 	}
 
-
+	// Создание токена
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &tokenClaims{
 		jwt.StandardClaims{
 			//валидность токена ограничена 12 часами по условию tokenTTL
@@ -58,6 +69,8 @@ func (s *AuthService) GenerateToken(email, password string) (string, error) {
 	//получает набор случайных пайтов для подписи и расшифровки
 	return token.SignedString([]byte(signingKey))
 }
+
+// Функция получения основных параметров пользователя ( имя, id, права админа )
 
 func  (s *AuthService) GetUserMainParams(email, password string) (string, int, string, error) {
 	user, err := s.repo.GetUser(email, generatePasswordHash(password))
@@ -72,16 +85,7 @@ func  (s *AuthService) GetUserMainParams(email, password string) (string, int, s
 	return name, id, admin, nil
 }
 
-func (s *AuthService) GetAdminRole(email, password string) (string, error) {
-	user, err := s.repo.GetUser(email, generatePasswordHash(password))
-	if err != nil {
-		return "", err
-	}
-
-	admin := user.Admin
-
-	return admin, nil
-}
+// Функция парсинга JWT ключа
 
 func (s *AuthService) ParseToken(accessToken string) (int, error) {
 	token, err := jwt.ParseWithClaims(accessToken, &tokenClaims{}, func(token *jwt.Token) (interface{}, error){
@@ -103,7 +107,7 @@ func (s *AuthService) ParseToken(accessToken string) (int, error) {
 	return claims.UserId, nil
 }
 
-// хэширование пароля
+// Хэширование пароля с помощью алгоритма sha1
 
 func generatePasswordHash(password string) string {
 	hash := sha1.New()

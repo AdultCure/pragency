@@ -37,7 +37,7 @@
 {
 "name": "Denisssddsffsdfssdf",
 "email": "pupa@yandex.ru",
-"password": "qwers"
+"password": "qwerty"
 }
 
 {

@@ -5,13 +5,19 @@ import (
 	"pragency/pkg/service"
 )
 
+// Структура хэндлеров
+
 type Handler struct {
 	services *service.Service
 }
 
+// Функция передачи в сервисы
+
 func NewHandler(services *service.Service) *Handler {
 	return &Handler{services: services}
 }
+
+// Функция работы с CORS для приема http запросов без строгой защиты
 
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -30,6 +36,8 @@ func CORSMiddleware() gin.HandlerFunc {
 	}
 }
 
+// Функция роутов описывающих запросы по ссылкам
+
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 	router.Use(CORSMiddleware())
@@ -47,8 +55,6 @@ func (h *Handler) InitRoutes() *gin.Engine {
 			order.POST("", h.createOrder)
 			order.GET("", h.getAllOrders)
 			order.GET("/:id", h.getOrdersById)
-			order.PUT("/:id", h.updateOrder)
-			order.DELETE("/:id", h.deleteOrder)
 		}
 
 		admin := api.Group("/admin")

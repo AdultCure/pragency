@@ -6,6 +6,8 @@ import (
 	backend "pragency"
 )
 
+// Функция регистрации
+
 func (h *Handler) signUp(c *gin.Context) {
 	var input backend.User
 
@@ -25,10 +27,14 @@ func (h *Handler) signUp(c *gin.Context) {
 	})
 }
 
+// Структура полей авторизации ( input's )
+
 type signInInput struct {
 	Email    string `json:"email" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
+
+// Функция авторизации
 
 func (h *Handler) signIn(c *gin.Context) {
 	var input signInInput

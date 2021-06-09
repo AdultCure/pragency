@@ -1,5 +1,7 @@
 package backend
 
+// Структура пользователя
+
 type User struct {
 	Id       int    `json:"id"`
 	Name     string `json:"name" binding:"required"`

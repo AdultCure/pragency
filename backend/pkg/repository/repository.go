@@ -5,10 +5,14 @@ import (
 	backend "pragency"
 )
 
+// Интерфейс авторизации
+
 type Authorization interface {
 	CreateUser(user backend.User) (int, error)
 	GetUser(email, password string) (backend.User, error)
 }
+
+// Интерфейс заказов
 
 type Order interface {
 	Create(userId int, order backend.Order) (int, error)
@@ -18,14 +22,16 @@ type Order interface {
 	UpdateAdmin(orderId int, input backend.UpdateOrderInput) error
 	DeleteAdmin(orderId int) error
 	GetById(userId, orderId int) (backend.Order, error)
-	Delete(userId, orderId int) error
-	Update(userId, orderId int, input backend.UpdateOrderInput) error
 }
+
+// Структура репозитория
 
 type Repository struct {
 	Authorization
 	Order
 }
+
+// Функция создания нового репозитория
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
