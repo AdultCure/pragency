@@ -1,5 +1,5 @@
 # pragency
 PR agency platform
 
-Backend - Me :)
+Backend - Me
 Frontend - @Maenstreamy
